@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosmo.team.project.dao.MemberDAO">
+
+	<insert id="insertMember" parameterType="kosmo.team.project.dto.MemberDTO">
+		insert into member(
+					m_no
+					,name
+					,mid
+					,password
+					,nickname
+					,email
+					,birthdate
+					,phone
+					,gender
+					,sido_id
+					,sigungu_id
+					,detail_address
+				)
+		values(
+			(select nvl(max(m_no),0)+1 from member)
+			,#{name}
+			,#{mid}
+			,#{password}
+			,#{nickname}
+			,#{email}
+			,to_date(#{birthday},'YYYY-MM-DD')
+			,'${phone1}-${phone2}-${phone3}'
+			,#{gender}
+			,#{sido_id}
+			,#{sigungu_id}
+			,#{detail_address}
+		)
+	</insert>
+	
+	
+	
+	<insert id="insertDetail" parameterType="kosmo.team.project.dto.MemberDTO">
+		insert into member_detail(
+			member
+		)
+		values(
+			(select max(m_no) from member)
+		)
+		
+	</insert>
+	
+	<insert id="insertRecoed" parameterType="kosmo.team.project.dto.MemberDTO">
+		insert into player_record(
+			player
+		)
+		values(
+			(select max(m_no) from member)
+		)
+		
+	</insert>
+	
+	
+	<select id="getmid" parameterType="kosmo.team.project.dto.MemberDTO" resultType="int">
+		select count(*)
+		from
+			member
+		where
+			mid = #{mid}
+	</select>
+	
+	<select id="updateMemForm" parameterType="kosmo.team.project.dto.MemberDTO" resultType="kosmo.team.project.dto.MemberDTO">
+		select
+		    m.name
+		    ,m.mid
+		    ,m.password
+		    ,m.nickname
+		    ,m.email
+		    ,substr(m.phone,0,3) as phone1
+		    ,substr(m.phone,5,4) as phone2
+		    ,substr(m.phone,10,4) as phone3
+		    ,s.name AS "sido"
+    		,si.name AS "sigungu"
+		    ,m.detail_address
+		from
+		     member m left join sido s ON m.sido_id = s.sido_id
+             		  LEFT JOIN sigungu si ON m.sigungu_id = si.sigungu_id
+		where
+			mid = #{mid}
+	</select>
+	
+	<update id="updateMem" parameterType="kosmo.team.project.dto.MemberDTO">
+		update
+			member
+		set
+			password = #{password}
+			,email = #{email}
+			,phone = '${phone1}-${phone2}-${phone3}'
+			,sido_id = #{sido_id}
+			,sigungu_id = #{sigungu_id}
+			,detail_address = #{detail_address}
+			,nickname = #{nickname}
+		where
+			mid = #{mid}
+	</update>
+	
+	
+	<!-- 마이페이지에 있는 내정보 가져오기 -->
+	<select id="getMyInfo" parameterType="int" resultType="kosmo.team.project.dto.MemberDTO">
+		select
+		    m.name
+		    ,m.m_no
+		    ,t.team_no    
+		    ,t.team_name 
+		    ,t.team_master   
+		from
+		    member m left join team_member tm on m.m_no = tm.team_member  
+		             left join team t on t.team_no = tm.team_no 
+		where
+			m.m_no = #{m_no}
+	</select>
+	
+	<!-- 마이페이지에 있는 내기록 가져오기 -->
+	<select id="getMyStat" parameterType="String" resultType="kosmo.team.project.dto.MemberDTO">
+		select
+		    r.games_played
+		    ,r.wins
+		    ,r.draws
+		    ,r.losses
+		    ,r.goals_for
+		    ,r.goals_assist
+		from 
+		    member m left join player_record r on m.m_no = r.player
+		where
+		    m.mid = #{mid}
+	</select>
+	
+	<!-- 예약한 경기장 가져오기 -->
+	<select id="getBookedStadium" parameterType="int" resultType="kosmo.team.project.dto.bookingDTO">
+		select
+		    s.stadium_name
+		    ,to_char(b.booking_date, 'YYYY-MM-DD') as "booking_date"
+		    ,t.time_range
+		from
+		    booking b left join stadium s on b.stadium_no = s.stadium_no
+		              left join time_table t on b.time_slot = t.time_no
+		where
+			b.m_no = #{m_no}
+			and 
+			(sysdate - booking_date) <![CDATA[ <=0 ]]>
+	</select>
+	
+	
+	
+	<!-- 팀 생성 -->
+	<insert id="registTeam" parameterType="kosmo.team.project.dto.TeamDTO">
+		insert into team(
+			team_no
+			,team_name
+			,team_master
+		)
+		values(
+			(select nvl(max(team_no),0)+1 from team)
+			,#{team_name}
+			,#{team_master}
+		)
+	</insert>
+	
+	<!-- 팀 생성후 멤버에 생성자 넣기 -->
+	<insert id="firstTeamMem" parameterType="kosmo.team.project.dto.TeamDTO">
+		insert into team_member(
+			team_no
+			,team_member
+		)
+		values(
+			(select team_no from team where team_master = #{team_master})
+			,#{team_master}
+		)
+	</insert>
+	
+	<!-- 팀수락 대기자 있는가? -->
+	<select id="getWaitingCnt" parameterType="int" resultType="int">
+		select
+		    count(*)
+		from
+		    waiting_teamReg
+		where
+		    team=(
+		    select  
+		        team_no 
+		    from
+		        team_member 
+		    where 
+		        team_member = #{m_no} 
+		    )
+	</select>
+	
+	<!-- 용병수락 대기자 있는가? -->
+	<select id="getMercWaitingCnt" parameterType="int" resultType="int">
+		select
+		    count(*)
+		from
+		    waiting_hiredReg
+		where
+		    team=(
+		    select  
+		        team_no 
+		    from
+		        team_member 
+		    where 
+		        team_member = #{m_no} 
+		    )
+	</select>
+	
+	
+	<!-- 팀수락 대기자 명단 -->
+	<select id="getWaitingList" parameterType="int" resultType="kosmo.team.project.dto.TeamDTO">
+		select
+			m.m_no
+		    ,m.name 
+		    ,to_number(to_char(sysdate, 'YYYY')) -
+				to_number(to_char(m.birthdate, 'YYYY')) AS "age" 
+		    ,s.name as "sido"
+		from
+		    member m left join sido s on m.sido_id = s.sido_id
+		             left join waiting_teamReg wt on m.m_no = wt.name 
+		where
+		    wt.team = (
+		        select  
+		            team_no 
+		        from
+		            team_member 
+		        where 
+		            team_member = #{m_no}  
+		    )
+	</select>
+	
+	<!-- 용병수락 대기자 명단 -->
+	<select id="getWaitingHiredList" parameterType="int" resultType="kosmo.team.project.dto.TeamDTO">
+		select
+		    m.m_no
+		    ,m.name 
+		    ,to_number(to_char(sysdate, 'YYYY')) -
+		        to_number(to_char(m.birthdate, 'YYYY')) AS "age" 
+		    ,s.name as "sido"
+		from
+		    member m left join sido s on m.sido_id = s.sido_id
+		             left join waiting_hiredReg wh on m.m_no = wh.m_no 
+		where
+		    wh.team = (
+		        select  
+		            team_no 
+		        from
+		            team_member 
+		        where 
+		            team_member = #{m_no}  
+		    )
+	</select>
+	
+	
+	<!-- 수락하면 내팀으로 들어오고 대기 테이블에서 삭제된다. -->
+	<insert id="regTeamMem" parameterType="kosmo.team.project.dto.TeamDTO">
+		 insert into team_member
+      <foreach collection="m_no_A" item="m_no"  open= " ( "  close = " ) "   separator=" union " >
+         select  (select team from waiting_teamReg where name = #{m_no}),#{m_no} from dual 
+      </foreach>
+	</insert>
+	
+	<delete id="delWaitingList" parameterType="kosmo.team.project.dto.TeamDTO">
+		delete 
+		from
+			waiting_teamReg
+		where
+			<foreach collection="m_no_A" item="m_no"  open= " ( "  close = " ) "   separator=" or " >
+	        name=#{m_no}
+	        </foreach>
+	</delete>
+	
+	
+	<!-- 내 팀정보를 가져온다 -->
+	<select id="getTeamInfo" parameterType="int" resultType="kosmo.team.project.dto.TeamDTO">
+		select
+		    m.name 
+		    ,m.m_no
+		    ,to_number(to_char(sysdate, 'YYYY')) -
+		        to_number(to_char(m.birthdate, 'YYYY')) AS "age" 
+		    ,s.name as "sido"
+		from
+		     member m left join sido s on m.sido_id = s.sido_id
+		              left join team_member tm on m.m_no = tm.team_member
+		where
+		    tm.team_no = (select team_no from team_member where team_member = #{team_no})     
+		
+	</select>
+	
+	
+	<!-- 매칭신청 대기자 있는가? -->
+	<select id="getmatchWaitingCnt" parameterType="int" resultType="int">
+	    select
+		    count(*)
+		from
+		    waiting_matchreg
+		where
+		    match_team = (select team_no from team_member where team_member = #{m_no})
+	</select>
+	
+	<!-- 매칭 대기팀목록 -->
+	<select id="getMatchWaitingList" parameterType="int" resultType="kosmo.team.project.dto.MatchingDTO">
+		select
+		     t.team_name
+		    ,m.nickname
+		    ,wm.vs_team
+		    ,wm.stadium     
+		    ,sta.stadium_name
+		    ,wm.day
+		    ,tt.time_range
+		    ,wm.time_no
+		from
+		    waiting_matchreg wm left join team t on wm.vs_team = t.team_no     
+		                        left join member m on t.team_master = m.m_no 
+		                        left join stadium sta on wm.stadium = sta.stadium_no
+		                        left join time_table tt on wm.time_no = tt.time_no   
+		where
+		    match_team = (select team_no from team_member where team_member = #{m_no})  
+	</select>
+	
+	<!-- 매칭수락하면 match_day테이블로 넘어가고 다른 팀들은 자동 거절된다. -->
+	
+	<insert id="matchReg" parameterType="kosmo.team.project.dto.TeamDTO"> 
+		    
+		insert into match_day
+	    values(
+	        #{match_team}
+	        ,#{vs_team}
+	        ,#{time_no}  
+	        ,(select day from waiting_matchreg where vs_team = #{vs_team} and match_team = #{match_team} and stadium = #{stadium} and time_no = #{time_no} )
+	        ,#{stadium}
+	    )  
+	</insert>
+	
+	<delete id="delMatch" parameterType="kosmo.team.project.dto.TeamDTO">
+	
+		delete 
+		from
+			waiting_matchreg
+		where
+			time_no=#{time_no}
+			and
+			day=(select day from waiting_matchreg where vs_team = #{vs_team} and match_team = #{match_team} and stadium = #{stadium} and time_no = #{time_no} )
+			and
+			stadium=#{stadium}
+	
+	</delete>
+	
+	<update id="updateChecking" parameterType="kosmo.team.project.dto.TeamDTO">
+		update
+			match
+		set
+			checking = '매칭완료'
+		where
+			time_no = #{time_no}
+			and
+			stadium = #{stadium}
+			and
+			day=(select day from waiting_matchreg where vs_team = #{vs_team} and match_team = #{match_team} and stadium = #{stadium} and time_no = #{time_no} )
+	</update>
+	
+	
+	
+	<!-- 다음 경기 일정들 --> 
+	<select id="getTeamMatchDay_match" parameterType="int" resultType="kosmo.team.project.dto.TeamDTO">
+   		 select
+		    t.team_name
+		    ,sta.stadium_name
+		    ,md.day
+		    ,tt.time_range
+		from
+		    match_day md left join stadium sta on md.stadium = sta.stadium_no  
+		                 left join time_table tt on md.time_no = tt.time_no            
+		                 left join team t on md.vs_team = t.team_no
+		where
+		    md.match_team = (select team_no from team_member where team_member = #{m_no})
+		    and 
+			(sysdate - to_date(md.day)) <![CDATA[ <=0 ]]>
+	
+	</select>
+	
+	<select id="getTeamMatchDay_vs" parameterType="int" resultType="kosmo.team.project.dto.TeamDTO">
+   		 select
+		    t.team_name
+		    ,sta.stadium_name
+		    ,md.day
+		    ,tt.time_range
+		from
+		    match_day md left join stadium sta on md.stadium = sta.stadium_no  
+		                 left join time_table tt on md.time_no = tt.time_no            
+		                 left join team t on md.match_team = t.team_no
+		where
+		    md.vs_team = (select team_no from team_member where team_member = #{m_no})
+		    and 
+			(sysdate - to_date(md.day)) <![CDATA[ <=0 ]]>
+	
+	</select>
+
+	<!-- 용병수락하면 내팀 용병테이블로 들어오고 대기 테이블에서 삭제된다. -->
+	<insert id="regHired" parameterType="kosmo.team.project.dto.TeamDTO">
+		 insert into team_merc
+      <foreach collection="m_no_H" item="m_no"  open= " ( "  close = " ) "   separator=" union " >
+         select  (select team from waiting_hiredReg where m_no = #{m_no}),#{m_no} from dual 
+      </foreach>
+	</insert>
+	
+	<delete id="delHired" parameterType="kosmo.team.project.dto.TeamDTO">
+		delete 
+		from
+			waiting_hiredReg
+		where
+			<foreach collection="m_no_H" item="m_no"  open= " ( "  close = " ) "   separator=" or " >
+	        m_no=#{m_no}
+	        </foreach>
+	</delete>
+	
+	
+	<!-- 팀에 들어온 용병목록가져오기 -->
+	<select id="getHiredList" parameterType="int" resultType="kosmo.team.project.dto.TeamDTO">
+		select
+		    m.name 
+		    ,m.m_no
+		    ,to_number(to_char(sysdate, 'YYYY')) -
+		        to_number(to_char(m.birthdate, 'YYYY')) AS "age" 
+		    ,s.name as "sido"
+		from
+		     member m left join sido s on m.sido_id = s.sido_id
+		              left join team_merc tm on m.m_no = tm.m_no
+		where
+		    tm.team_no = (select team_no from team_member where team_member = #{m_no})  
+	</select>
+	
+	
+	<!-- 레슨수락하면 레슨테이블로 들어오고 대기 테이블에서 삭제된다. -->
+	<insert id="regLesson" parameterType="kosmo.team.project.dto.TeamDTO">
+		 insert into lesson_member
+      <foreach collection="m_no_L" item="m_no_L"  open= " ( "  close = " ) "   separator=" union " >
+         select  #{m_no},#{m_no_L} from dual 
+      </foreach>
+	</insert>
+	
+	<delete id="delLesson" parameterType="kosmo.team.project.dto.TeamDTO">
+		delete 
+		from
+			waiting_lessonReg
+		where
+			<foreach collection="m_no_L" item="m_no"  open= " ( "  close = " ) "   separator=" or " >
+	        m_no=#{m_no}
+	        </foreach>
+	</delete>
+	
+	<!-- 레슨 대기자목록-->
+	<select id="getWaitingLessonList" parameterType="int" resultType="kosmo.team.project.dto.TeamDTO">
+   		select
+		    m.name 
+		    ,m.m_no
+		    ,to_number(to_char(sysdate, 'YYYY')) -
+		        to_number(to_char(m.birthdate, 'YYYY')) AS "age" 
+		    ,s.name as "sido"
+		from
+		     member m left join sido s on m.sido_id = s.sido_id
+		              left join waiting_lessonreg wl on m.m_no = wl.m_no
+		where
+		    wl.writer = #{m_no}  
+	</select>
+	
+	<!-- 나의 레슨 듣는 사람들 목록-->
+	<select id="getLessonList" parameterType="int" resultType="kosmo.team.project.dto.TeamDTO">
+   		select
+		    m.name 
+		    ,m.m_no
+		    ,to_number(to_char(sysdate, 'YYYY')) -
+		        to_number(to_char(m.birthdate, 'YYYY')) AS "age" 
+		    ,s.name as "sido"
+		from
+		     member m left join sido s on m.sido_id = s.sido_id
+		              left join lesson_member lm on m.m_no = lm.student
+		where
+		    lm.instructor = #{m_no} 
+	</select>
+	 
+</mapper>

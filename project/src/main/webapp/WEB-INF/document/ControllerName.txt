@@ -1,0 +1,52 @@
+MainController
+	- mainForm.do
+	- loginForm.do
+	- memberRegForm.do
+	- customerServiceForm.do
+
+MatchingController
+	- matchingBoardForm.do
+	- matchingBoardDetailForm.do
+	- matchingNewBoardForm.do
+
+RecruitController
+	- recruitTeamBoardForm.do
+		- recruitTeamBoardDetailForm.do
+		- recruitTeamNewBoardForm.do
+	- recruitHiredForm.do
+		- recruitHiredBoardDetailForm.do
+		- recruitHiredNewBoardForm.do
+	- recruitLessonForm.do
+		- recruitLessonBoardDetailForm.do
+		- recruitLessonNewBoardForm.do
+
+StadiumController
+	- stadiumRentBoardForm.do
+		- stadiumRentBoardDetailForm.do
+	- stadiumTransferForm.do
+		- stadiumTransferBoardDetailForm.do
+		- stadiumTransferNewBoardForm.do
+
+CommunityController
+	- CommunityNoticeBoardForm.do
+		- communityNoticeBoardDetailForm.do
+		- communityNoticeNewBoardForm.do
+	- CommunityFreeBoardForm.do
+		- communityFreeBoardDetailForm.do
+		- communityFreeBoardNewBoardForm.do
+	- CommunityGallaryForm.do
+		- communityGallaryDetailForm.do
+		- communityGallaryNewBoardForm.do
+	- CommunityMarketplaceBoardForm.do
+		- communityMarketplaceBoardDetailForm.do
+		- communityMarketplaceNewBoardForm.do
+
+TournamentController
+	- tournamentBoardForm.do
+	- tournamentBoardDetailForm.do
+	- tournamentNewBoardForm.do
+
+RecordsController
+	- recordsRankingForm.do
+	- recordsStatisticsForm.do
+	

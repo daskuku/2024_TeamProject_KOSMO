@@ -1,0 +1,284 @@
+* {
+	font-size: 15px;
+}
+
+table {
+	border-collapse: collapse;
+	border-color: none;
+	margin: 0 auto;
+}
+
+th, td {
+	padding: 10px 15px 10px 15px;
+}
+
+th {
+	background-color: rgba(197, 146, 70, 0.4);
+    color: white;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  overflow-x: hidden;
+}
+
+ul, ol{
+	list-style:none;
+}
+
+a{
+	text-decoration:none;
+}
+
+.titleBackgoundText{
+	border-bottom: 1px solid #000000;
+	width: 55%;
+	margin: 0 auto;
+	font-size: 40px;
+	text-align: center;
+	padding: 40px;
+}
+
+.checkCommentBtn{
+    margin-left: 25px;
+}
+
+.freeBoardDetailBtnDiv{
+	justify-content: center;
+	margin-top: 10px;
+	margin-left: 750px;
+	display: flex;
+	gap: 10px;
+	margin-bottom: 60px;
+}
+
+.moveListBtn, .freeBoardUpDelBtn{
+	width: 150px;
+	height: 50px;
+	margin-top: 20px;
+	background-color: #c59246e0;
+    color: #FFFFFF;
+    border-radius: 10px;
+    border: 1px solid #c59246e0;
+    cursor: pointer;
+}
+
+.checkCommentBtn{
+	width: 100px;
+	height: 40px;
+	margin-top: 10px;
+	background-color: #c59246e0;
+    color: #FFFFFF;
+    border-radius: 10px;
+    border: 1px solid #c59246e0;
+    cursor: pointer;
+}
+
+.communityFreeBoardCommentPaging{
+	text-align: center;
+	margin-top: 30px;
+}
+
+.freeBoardDetailCommentDiv{
+	text-align: center;
+	margin-top: 100px;
+	border: 1px solid #999999;
+	width: 1000px;
+	margin: 0 auto;
+	padding: 30px 0;
+	border-radius: 30px;
+	height: 170px;
+}
+
+.activePageNo{
+    color: #FFFFFF;
+    background-color: #c59246e0;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    text-align: center;
+    line-height: 30px;
+}
+
+.arrowLeft {
+    color: #c59246e0;
+}
+
+.arrowLeft strong{
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.arrowRight {
+    color: #c59246e0;
+}
+
+.arrowRight strong{
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.freeBoardDetailCommentTitle{
+	margin-right: 830px;
+	margin-bottom: 30px;
+}
+
+.freeBoardDetailTextAndBtnAndWriter{
+	display: flex;
+	justify-content: center;
+}
+
+.freeBoardDetailWriter{
+	display: flex;
+	line-height: 2.5;
+	justify-content: center;
+	margin-right: 720px;
+	white-space: nowrap;
+}
+
+.freeBoardDetailWriterTitle{
+	background-color:rgba(197, 146, 70, 0.4);
+	width: 80px;
+	height: 40px;
+	line-height: 2.5;
+	border-radius: 10px;
+	margin-right: 10px;
+	white-space: nowrap;
+}
+
+.content{
+	height: 80px;
+	margin-top: 10px;
+	border-color: rgba(197, 146, 70, 0.4);
+	border-radius: 15px;
+	text-align: left;
+	border-collapse: collapse;
+}
+
+.freeBoardCommentWriterTitle{
+    background-color:rgba(197, 146, 70, 0.4);
+	width: 80px;
+	height: 40px;
+	line-height: 2.7;
+	border-radius: 10px;
+	margin-right: 10px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.freeBoardCommentTopContent{
+    display: flex;
+}
+
+.freeBoardCommentWriterAndRegDate{
+    flex-direction: column;
+}
+
+.checkCommentUpBtn, .checkCommentDelBtn, .checkCommentRegBtn{
+    background-color:#c59246e0;
+	width: 80px;
+	height: 40px;
+	line-height: 2.7;
+	border-radius: 10px;
+	margin-right: 10px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    color: #FFFFFF;
+}
+
+.checkCommentReplyBtn{
+    background-color:#c59246e0;
+	width: 100px;
+	height: 40px;
+	line-height: 2.7;
+	border-radius: 10px;
+	margin-right: 10px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    color: #FFFFFF;
+}
+
+.freeBoardCommentDiv{
+    margin: 0 auto;
+    margin-top: 20px;
+    border-bottom: 1px solid #999999;
+    width: 900px;
+    padding: 0 30px;
+}
+
+.freeBoardCommentText{
+    margin-top: 15px;
+}
+
+.freeBoardReplyDiv{
+    margin: 0 auto;
+    margin-top: 10px;
+    width: 840px;
+    padding: 0 30px;
+}
+
+.freeBoardReplayWriterAndRegDate, .freeBoardReplyBtn, .freeBoardReplyText{
+    margin-left: 50px;
+}
+
+.freeBoardReplyText{
+    margin-top: 15px;
+}
+
+.freeBoardCommentUpDelBtn{
+    display: flex;
+    margin-left: auto;
+    gap: 10px; /* Optional: Adds space between the buttons */
+}
+
+.freeBoardCommentBottomContent{
+    display: flex;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    flex-direction: column;
+}
+
+.checkCommentUpBtnDiv, .checkCommentDelBtnDiv{
+    display: inline-block;
+}
+
+.freeBoardReplytBottomContent{
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.trCommentOfComment{
+	display: flex;
+	justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 10px; /* 입력란과 버튼 사이의 간격 */	
+    margin-top: 30px;
+    margin-left: -40px;
+}
+
+.freeBoardCommentBtn{
+	display: flex;
+    justify-content: space-between; /* 요소들 사이에 공간을 고르게 배분 */
+    align-items: center; /* 수직 정렬 */	
+}
+
+.checkCommentReplyBtnDiv {
+    flex: 1;
+}
+
+.checkCommentUpDelBtnDiv {
+    display: flex;
+    gap: 10px; /* 버튼 사이에 간격 추가 (원하는 대로 조정 가능) */
+}
+
+.indent {
+    display: inline-block;
+}

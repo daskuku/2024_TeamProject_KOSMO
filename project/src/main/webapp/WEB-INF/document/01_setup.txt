@@ -1,0 +1,46 @@
+﻿테마 다크버전으로 변경 방법 Preferences > General > Appearance > Theme : Dark
+
+1. workspace_project 폴더 생성
+
+2. 프로젝트 생성
+	Type : Gradle - Groovy
+	Name : project
+	Packaging : War
+	Java Version : 17
+	Group : kosmo.team
+	Artifact : project
+	Version : 0.1
+	Description : KOSMO Team Project for Spring Boot
+	Package : kosmo.team.project
+
+******* <주의> 아래 부분은 번거롭지만 모두 해야 한다.
+3. Help > Eclipse Marketplace 클릭
+	Find 란에 Eclipse Enterprise Java 입력 후 검색하여 설치한다.
+	
+	진행 도중 
+	Confirm selected Features 창에 체크박스 선택하지 말고 Confirm 버튼 클릭한다.
+	Review Licenses 창에 I accept the terms of the license agreements 라디오 버튼 클릭 후 
+	Finish 한다.
+	
+	설치 중 
+	Trust 창이 나오면 PGP 앞 체크박스에 클릭하고 Trust Selected 버튼을 클릭한다.
+	Sofware Updates 창이 나오면 Restart Now 버튼을 클릭한다.
+	
+4. application.properties 설정 변경 부분
+	server.port=8081	→	8282
+	
+	spring.mvc.view.prefix=/WEB-INF/views/		→		/WEB-INF/jsp/
+	
+	mybatis.mapper-locations=classpath:com/naver/erp/*.xml 	→	kosmo/team/project/mapper/*.xml
+	
+
+5. build.gradle 설정 변경
+	group = 'kosmo.team'
+	version = '0.1'
+	id 'org.springframework.boot' version '2.7.18'
+
+	******* <주의> 아래 부분은 번거롭지만 설정이 바뀌면 모두 해야 한다.
+	build.gradle 선택하고 마우스 오른쪽 클릭 > Gradle > Refresh Gradle Project 를 해준다.
+	
+6. 접속 URL
+	http://localhost:8282/sampleList.controller

@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosmo.team.project.dao.RecordsDAO">
+	<!-- 전체 순위 -->
+	<select id="getRecordsRankingTabAll" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		select
+		    m.nickname AS "nickname",
+		    p.games_played as "games_played",
+		    p.wins as "wins",
+		    p.draws as "draws",
+		    p.losses as "losses",
+		    p.goals_for as "goals_for",
+		    p.goals_assist as "goals_assist"  
+		from
+		    member m, player_record p
+		where
+		    p.player = m.m_no
+		<if test="sortTabAll == null or sortTabAll.isEmpty()">
+		    order by games_played desc
+		</if>
+		<if test="sortTabAll != null and !sortTabAll.isEmpty()">
+		    order by ${sortTabAll}
+		</if>
+	</select>
+	
+	<select id="getRecordsRankingTabAllListCnt" resultType="int">
+		select 
+			count(*) 
+		from
+		    player_record
+	</select>
+	
+	<select id="getRecordsGoalRatingTabAll" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_for as "goals_for"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		ORDER BY 
+			p.goals_for DESC
+	</select>
+	
+	<select id="getRecordsWinRatingTabAll" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.wins as "wins"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		ORDER BY 
+			p.wins DESC
+	</select>
+	
+	<select id="getRecordsAssistRatingTabAll" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_assist as "goals_assist"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		ORDER BY 
+			p.goals_assist DESC
+	</select>
+	
+	<!-- 지역별 순위 -->
+	
+	<select id="getRecordsRankingTabRegion" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		select
+		    m.nickname AS "nickname",
+		    p.games_played as "games_played",
+		    p.wins as "wins",
+		    p.draws as "draws",
+		    p.losses as "losses",
+		    p.goals_for as "goals_for",
+		    p.goals_assist as "goals_assist",
+			s.name AS "region"  
+		from
+		    member m, player_record p, sido s
+		where
+			1=1
+			and
+		    p.player = m.m_no
+		    and
+		    m.sido_id = s.sido_id
+		    <if test="sido_id != null and sido_id == 9">
+			    AND m.sido_id = 9
+			</if>
+			<if test="sido_id != null and sido_id == 2">
+			    AND (m.sido_id = 2 or m.sido_id = 11)
+			</if>
+			<if test="sido_id != null and sido_id == 1">
+			    AND m.sido_id = 1
+			</if>
+			<if test="sido_id != null and sido_id == 7">
+			    AND (m.sido_id = 7 or m.sido_id = 15 or m.sido_id = 16)
+			</if>
+			<if test="sido_id != null and sido_id == 5">
+			    AND (m.sido_id = 5 or m.sido_id = 12 or m.sido_id = 13)
+			</if>
+			<if test="sido_id != null and sido_id == 3">
+			    AND (m.sido_id = 3 or m.sido_id = 4 or m.sido_id = 6 or m.sido_id = 8 or m.sido_id = 10)
+			</if>
+			<if test="sido_id != null and sido_id == 14">
+			    AND m.sido_id = 14
+			</if>
+		<if test="sortTabRegion == null or sortTabRegion.isEmpty()">
+		    ORDER BY games_played DESC
+		</if>
+		<if test="sortTabRegion != null and !sortTabRegion.isEmpty()">
+		    ORDER BY ${sortTabRegion}
+		</if>
+	</select>
+	
+	<select id="getRecordsRankingTabRegionListCnt" resultType="int">
+		select 
+			count(*) 
+		from
+		    player_record
+	</select>
+	
+	<select id="getRecordsGoalRatingTabRegion" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_for as "goals_for"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		     <choose>
+	        	<when test="sido_id != null and sido_id == 9">
+			   		AND m.sido_id = 9
+			    </when>
+			    <when test="sido_id != null and sido_id == 2">
+			   		AND (m.sido_id = 9 or m.sido_id = 11)
+			    </when>
+			    <when test="sido_id != null and sido_id == 1">
+			   		AND m.sido_id = 1
+			    </when>
+			    <when test="sido_id != null and sido_id == 7">
+			   		AND (m.sido_id = 7 or m.sido_id = 15 or m.sido_id = 16)
+			    </when>
+			    <when test="sido_id != null and sido_id == 5">
+			   		AND (m.sido_id = 5 or m.sido_id = 12 or m.sido_id = 13)
+			    </when>
+			    <when test="sido_id != null and sido_id == 3">
+			   		AND (m.sido_id = 3 or m.sido_id = 4 or m.sido_id = 6 or m.sido_id = 8 or m.sido_id = 10)
+			    </when>
+			    <when test="sido_id != null and sido_id == 14">
+			   		AND m.sido_id = 14
+			    </when>
+	        </choose>
+		ORDER BY 
+			p.goals_for DESC
+	</select>
+	
+	<select id="getRecordsWinRatingTabRegion" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.wins as "wins"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		     <choose>
+	        	<when test="sido_id != null and sido_id == 9">
+			   		AND m.sido_id = 9
+			    </when>
+			    <when test="sido_id != null and sido_id == 2">
+			   		AND (m.sido_id = 9 or m.sido_id = 11)
+			    </when>
+			    <when test="sido_id != null and sido_id == 1">
+			   		AND m.sido_id = 1
+			    </when>
+			    <when test="sido_id != null and sido_id == 7">
+			   		AND (m.sido_id = 7 or m.sido_id = 15 or m.sido_id = 16)
+			    </when>
+			    <when test="sido_id != null and sido_id == 5">
+			   		AND (m.sido_id = 5 or m.sido_id = 12 or m.sido_id = 13)
+			    </when>
+			    <when test="sido_id != null and sido_id == 3">
+			   		AND (m.sido_id = 3 or m.sido_id = 4 or m.sido_id = 6 or m.sido_id = 8 or m.sido_id = 10)
+			    </when>
+			    <when test="sido_id != null and sido_id == 14">
+			   		AND m.sido_id = 14
+			    </when>
+	        </choose>
+		ORDER BY 
+			p.wins DESC
+	</select>
+	
+	<select id="getRecordsAssistRatingTabRegion" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_assist as "goals_assist"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		     <choose>
+	        	<when test="sido_id != null and sido_id == 9">
+			   		AND m.sido_id = 9
+			    </when>
+			    <when test="sido_id != null and sido_id == 2">
+			   		AND (m.sido_id = 2 or m.sido_id = 11)
+			    </when>
+			    <when test="sido_id != null and sido_id == 1">
+			   		AND m.sido_id = 1
+			    </when>
+			    <when test="sido_id != null and sido_id == 7">
+			   		AND (m.sido_id = 7 or m.sido_id = 15 or m.sido_id = 16)
+			    </when>
+			    <when test="sido_id != null and sido_id == 5">
+			   		AND (m.sido_id = 5 or m.sido_id = 12 or m.sido_id = 13)
+			    </when>
+			    <when test="sido_id != null and sido_id == 3">
+			   		AND (m.sido_id = 3 or m.sido_id = 4 or m.sido_id = 6 or m.sido_id = 8 or m.sido_id = 10)
+			    </when>
+			    <when test="sido_id != null and sido_id == 14">
+			   		AND m.sido_id = 14
+			    </when>
+	        </choose>
+		ORDER BY 
+			p.goals_assist DESC
+	</select>
+	
+	<!-- 성별 순위 -->
+	
+	<select id="getRecordsRankingTabGender" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		select
+		    m.nickname AS "nickname",
+		    p.games_played as "games_played",
+		    p.wins as "wins",
+		    p.draws as "draws",
+		    p.losses as "losses",
+		    p.goals_for as "goals_for",
+		    p.goals_assist as "goals_assist",
+			m.gender as "gender"
+		from
+		    member m, player_record p
+		where
+			1=1
+			and
+		    p.player = m.m_no
+		    <if test="gender != null">
+		    	and
+		    	m.gender='${gender}'
+		    </if>
+		    <if test="sortTabGender == null or sortTabGender.isEmpty()">
+			    order by games_played desc
+			</if>
+			<if test="sortTabGender != null and !sortTabGender.isEmpty()">
+			    order by ${sortTabGender}
+			</if>
+	</select>
+	
+	<select id="getRecordsRankingTabGenderListCnt" resultType="int">
+		select 
+			count(*) 
+		from
+		    player_record
+	</select>
+	
+	<select id="getRecordsGoalRatingTabGender" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_for as "goals_for"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		   <if test="gender != null">
+		    	and
+		    	m.gender='${gender}'
+		    </if>
+		ORDER BY 
+			p.goals_for DESC
+	</select>
+	
+	<select id="getRecordsWinRatingTabGender" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.wins as "wins"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		    <if test="gender != null">
+		    	and
+		    	m.gender='${gender}'
+		    </if>
+		ORDER BY 
+			p.wins DESC
+	</select>
+	
+	<select id="getRecordsAssistRatingTabGender" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_assist as "goals_assist"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		    <if test="gender != null">
+		    	and
+		    	m.gender='${gender}'
+		    </if>
+		ORDER BY 
+			p.goals_assist DESC
+	</select>
+	
+	<!-- 연령대별 순위 -->
+	
+	<select id="getRecordsRankingTabAge" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		select
+		    m.nickname AS "nickname",
+		    p.games_played as "games_played",
+		    p.wins as "wins",
+		    p.draws as "draws",
+		    p.losses as "losses",
+		    p.goals_for as "goals_for",
+		    p.goals_assist as "goals_assist",
+			m.birthdate as "birthdate"
+		from
+		    member m, player_record p
+		where
+			1=1
+			and
+		    p.player = m.m_no
+		    <choose>
+	            <when test="age != null and age == '10대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 10 AND 19)
+	            </when>
+	            <when test="age != null and age == '20대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 20 AND 29)
+	            </when>
+	            <when test="age != null and age == '30대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 30 AND 39)
+	            </when>
+	            <when test="age != null and age == '40대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 40 AND 49)
+	            </when>
+	            <when test="age != null and age == '50대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 50 AND 59)
+	            </when>
+	            <when test="age != null and age == '60대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 60 AND 69)
+	            </when>
+	            <when test="age != null and age == '70대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 70 AND 79)
+	            </when>
+	            <when test="age != null and age == '80대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 80 AND 89)
+	            </when>
+	        </choose>
+		<if test="sortTabAge == null or sortTabAge.isEmpty()">
+		    order by games_played desc
+		</if>
+		<if test="sortTabAge != null and !sortTabAge.isEmpty()">
+		    order by ${sortTabAge}
+		</if>
+	</select>
+	
+	<select id="getRecordsRankingTabAgeListCnt" resultType="int">
+		select 
+			count(*) 
+		from
+		    player_record
+	</select>
+	
+	<select id="getRecordsGoalRatingTabAge" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_for as "goals_for"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		   <choose>
+	            <when test="age != null and age == '10대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 10 AND 19)
+	            </when>
+	            <when test="age != null and age == '20대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 20 AND 29)
+	            </when>
+	            <when test="age != null and age == '30대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 30 AND 39)
+	            </when>
+	            <when test="age != null and age == '40대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 40 AND 49)
+	            </when>
+	            <when test="age != null and age == '50대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 50 AND 59)
+	            </when>
+	            <when test="age != null and age == '60대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 60 AND 69)
+	            </when>
+	            <when test="age != null and age == '70대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 70 AND 79)
+	            </when>
+	            <when test="age != null and age == '80대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 80 AND 89)
+	            </when>
+	        </choose>
+		ORDER BY 
+			p.goals_for DESC
+	</select>
+	
+	<select id="getRecordsWinRatingTabAge" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.wins as "wins"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		    <choose>
+	            <when test="age != null and age == '10대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 10 AND 19)
+	            </when>
+	            <when test="age != null and age == '20대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 20 AND 29)
+	            </when>
+	            <when test="age != null and age == '30대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 30 AND 39)
+	            </when>
+	            <when test="age != null and age == '40대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 40 AND 49)
+	            </when>
+	            <when test="age != null and age == '50대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 50 AND 59)
+	            </when>
+	            <when test="age != null and age == '60대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 60 AND 69)
+	            </when>
+	            <when test="age != null and age == '70대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 70 AND 79)
+	            </when>
+	            <when test="age != null and age == '80대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 80 AND 89)
+	            </when>
+	        </choose>
+		ORDER BY 
+			p.wins DESC
+	</select>
+	
+	<select id="getRecordsAssistRatingTabAge" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_assist as "goals_assist"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		    <choose>
+	            <when test="age != null and age == '10대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 10 AND 19)
+	            </when>
+	            <when test="age != null and age == '20대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 20 AND 29)
+	            </when>
+	            <when test="age != null and age == '30대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 30 AND 39)
+	            </when>
+	            <when test="age != null and age == '40대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 40 AND 49)
+	            </when>
+	            <when test="age != null and age == '50대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 50 AND 59)
+	            </when>
+	            <when test="age != null and age == '60대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 60 AND 69)
+	            </when>
+	            <when test="age != null and age == '70대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 70 AND 79)
+	            </when>
+	            <when test="age != null and age == '80대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 80 AND 89)
+	            </when>
+	        </choose>
+		ORDER BY 
+			p.goals_assist DESC
+	</select>
+	
+	<select id="getAnnualRegisteredMember" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+		    SUM(CASE WHEN TO_CHAR(reg_date, 'YYYY') BETWEEN '2000' AND '2004' THEN 1 ELSE 0 END) AS "count_2000",
+		    SUM(CASE WHEN TO_CHAR(reg_date, 'YYYY') BETWEEN '2005' AND '2009' THEN 1 ELSE 0 END) AS "count_2005",
+		    SUM(CASE WHEN TO_CHAR(reg_date, 'YYYY') BETWEEN '2010' AND '2014' THEN 1 ELSE 0 END) AS "count_2010",
+		    SUM(CASE WHEN TO_CHAR(reg_date, 'YYYY') BETWEEN '2015' AND '2019' THEN 1 ELSE 0 END) AS "count_2015",
+		    SUM(CASE WHEN TO_CHAR(reg_date, 'YYYY') BETWEEN '2020' AND '2023' THEN 1 ELSE 0 END) AS "count_2020",
+		    SUM(CASE WHEN TO_CHAR(reg_date, 'YYYY') BETWEEN '2024' AND '2024' THEN 1 ELSE 0 END) AS "count_2024"
+		FROM
+    		member
+	</select>
+	
+	<select id="getRegionRatio" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+		    SUM(CASE WHEN sido_id = 1 THEN 1 ELSE 0 END) AS "count_gangwondo",
+		    SUM(CASE WHEN sido_id = 2 or sido_id = 11 THEN 1 ELSE 0 END) AS "count_gyeonggido",
+		    SUM(CASE WHEN sido_id = 3 or sido_id = 4 or sido_id = 6 or sido_id = 8 or sido_id = 10 THEN 1 ELSE 0 END) AS "count_gyeongsangdo",
+		    SUM(CASE WHEN sido_id = 5 or sido_id = 12 or sido_id = 13 THEN 1 ELSE 0 END) AS "count_jeollado",
+		    SUM(CASE WHEN sido_id = 7 or sido_id = 15 or sido_id = 16 THEN 1 ELSE 0 END) AS "count_chungcheongdo",
+		    SUM(CASE WHEN sido_id = 9 THEN 1 ELSE 0 END) AS "count_seoul",
+		    SUM(CASE WHEN sido_id = 14 THEN 1 ELSE 0 END) AS "count_jejudo"
+		FROM
+		    member
+	</select>
+	
+	<select id="getGenderRatio" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+		    SUM(CASE WHEN gender = '남' THEN 1 ELSE 0 END) AS "count_men",
+		    SUM(CASE WHEN gender = '여' THEN 1 ELSE 0 END) AS "count_women"
+		FROM
+		    member
+	</select>
+	
+	<select id="getAgeRatio" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 10 AND 19) THEN 1 ELSE 0 END) AS "count_10",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 20 AND 29) THEN 1 ELSE 0 END) AS "count_20",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 30 AND 39) THEN 1 ELSE 0 END) AS "count_30",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 40 AND 49) THEN 1 ELSE 0 END) AS "count_40",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 50 AND 59) THEN 1 ELSE 0 END) AS "count_50",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 60 AND 69) THEN 1 ELSE 0 END) AS "count_60",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 70 AND 79) THEN 1 ELSE 0 END) AS "count_70",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 80 AND 89) THEN 1 ELSE 0 END) AS "count_80"
+		FROM
+		    member
+	</select>
+	
+	<select id="getTeamMemberCnt" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT 
+		    t.team_name AS "teamname",
+		    COUNT(m.team_no) AS "count_team"
+		FROM 
+		    team_member m 
+		JOIN 
+		    team t ON m.team_no = t.team_no 
+		GROUP BY
+		    t.team_name
+	</select>
+</mapper>

@@ -1,0 +1,373 @@
+package com.naver.erp;
+
+import java.util.List;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class BoardDAOImpl implements BoardDAO {
+	@Autowired
+	private SqlSessionTemplate sqlSession;
+
+	// mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// 게시판 총 개수 구하는 메소드 선언하기
+	// mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	@Override
+	public int getBoardListAllCnt( ) {
+		int boardListCnt = sqlSession.selectOne("com.naver.erp.BoardDAO.getBoardListCnt");
+		return boardListCnt;
+	}
+	
+	@Override
+	public int getBoardListCnt(BoardSearchDTO boardSearchDTO) {
+		int boardListCnt = sqlSession.selectOne("com.naver.erp.BoardDAO.getBoardListCnt", boardSearchDTO);
+		return boardListCnt;
+	}
+	
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// 자식글의 개수를 리턴하는 메소드 -->
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// 자식글이 있는 글은 삭제할 때 제목과 내용을 '삭제됨' 으로 표시
+	@Override
+	public int getBoardChildrenCnt(BoardDTO boardDTO) {
+		//------------------------------------
+		// SqlSessionTemplate 객체의 
+		// selectOne 메소드를 호출하여 
+		// 자식글의 개수를 얻기
+		//------------------------------------
+		//------------------------------------
+		// 실행할 SQL 구문의 위치를 지정하기
+		//------------------------------------
+			//------------------------------------
+			// xml 파일 안의 
+			// <mapper namespace="com.naver.erp.BoardDAO"> 를 가진 mapper 태그 내부에
+			// id="getBoardChildrenCnt" 를 가진 태그 내부의 SQL 구문
+			//------------------------------------
+//		"com.naver.erp.BoardDAO.getBoardChildrenCnt" 
+		//------------------------------------
+		// SQL 구문에 참여할 데이터
+		//------------------------------------
+//		, boardDTO
+//);		
+		int boardChildrenCnt = sqlSession.selectOne("com.naver.erp.BoardDAO.getBoardChildrenCnt", boardDTO);
+
+		//------------------------------------
+		// 자식글의 개수를 리턴하기
+		//------------------------------------		
+		return boardChildrenCnt;
+	}
+
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm-->
+	// 제목과 내용을 '삭제된 게시물입니다.' 라고 수정하는 메소드 선언하기
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm-->
+	@Override
+	public int updateBoardEmpty(BoardDTO boardDTO) {
+		//------------------------------------
+		// SqlSessionTemplate 객체의 
+		// update 메소드를 호출하여 
+		// 수정 적용행의 개수를 얻기
+		//------------------------------------
+		//------------------------------------
+		// 실행할 SQL 구문의 위치를 지정하기
+		//------------------------------------
+			//------------------------------------
+			// xml 파일 안의 
+			// <mapper namespace="com.naver.erp.BoardDAO"> 를 가진 mapper 태그 내부에
+			// id="updateBoardEmpty" 를 가진 태그 내부의 SQL 구문
+			//------------------------------------
+//		"com.naver.erp.BoardDAO.updateBoardEmpty" 
+		//------------------------------------
+		// SQL 구문에 참여할 데이터
+		//------------------------------------
+//		, boardDTO
+//);		
+		int updateBoardEmptyCnt = sqlSession.update("com.naver.erp.BoardDAO.updateBoardEmpty", boardDTO);
+
+		//------------------------------------
+		// 수정 적용행의 개수를 리턴하기
+		//------------------------------------
+		return updateBoardEmptyCnt;
+	}
+
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// 엄마글의 후손 글 출력 순서번호를 1 업데이트하는 메소드 선언하기
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	@Override
+	public int upPrintNo(BoardDTO boardDTO) {
+		//------------------------------------
+		// SqlSessionTemplate 객체의 
+		// update 메소드를 호출하여 
+		// 수정 적용행의 개수를 얻기
+		//------------------------------------
+		//------------------------------------
+		// 실행할 SQL 구문의 위치를 지정하기
+		//------------------------------------
+			//------------------------------------
+			// xml 파일 안의 
+			// <mapper namespace="com.naver.erp.BoardDAO"> 를 가진 mapper 태그 내부에
+			// id="upPrintNo" 를 가진 태그 내부의 SQL 구문
+			//------------------------------------
+		//"com.naver.erp.BoardDAO.upPrintNo" 
+		//------------------------------------
+		// SQL 구문에 참여할 데이터
+		//------------------------------------
+		//, boardDTO
+//);		
+		int upPrintNoCnt = sqlSession.update("com.naver.erp.BoardDAO.upPrintNo", boardDTO);
+
+		//------------------------------------
+		// 수정 적용행의 개수를 리턴하기
+		//------------------------------------
+		return upPrintNoCnt;
+	}
+
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// [1개 게시판] 입력 실행하고 입력 적용행의 개수를 리턴하는 메소드 선언
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	@Override
+	public int insertBoard(BoardDTO boardDTO) {
+		//------------------------------------
+		// SqlSessionTemplate 객체의 
+		// insert 메소드를 호출하여 
+		// 입력 적용행의 개수를 얻기
+		//------------------------------------
+		//------------------------------------
+		// 실행할 SQL 구문의 위치를 지정하기
+		//------------------------------------
+			//------------------------------------
+			// xml 파일 안의 
+			// <mapper namespace="com.naver.erp.BoardDAO"> 를 가진 mapper 태그 내부에
+			// id="insertBoard" 를 가진 태그 내부의 SQL 구문
+			//------------------------------------
+	//	"com.naver.erp.BoardDAO.insertBoard" 
+		//------------------------------------
+		// SQL 구문에 참여할 데이터
+		//------------------------------------
+	//	, boardDTO
+//);		
+		int insertCnt = sqlSession.insert("com.naver.erp.BoardDAO.insertBoard", boardDTO);
+
+		//------------------------------------
+		// 입력 적용행의 개수를 리턴하기
+		//------------------------------------
+		return insertCnt;
+	}
+
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// [1개 게시판] 삭제 실행하고 삭제 적용행의 개수를 리턴하는 메소드 선언
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm	
+	@Override
+	public int deleteBoard(BoardDTO boardDTO) {
+		//------------------------------------
+		// SqlSessionTemplate 객체의 
+		// delete 메소드를 호출하여 
+		// 삭제 적용행의 개수를 얻기
+		//------------------------------------
+		//------------------------------------
+		// 실행할 SQL 구문의 위치를 지정하기
+		//------------------------------------
+			//------------------------------------
+			// xml 파일 안의 
+			// <mapper namespace="com.naver.erp.BoardDAO"> 를 가진 mapper 태그 내부에
+			// id="deleteBoard" 를 가진 태그 내부의 SQL 구문
+			//------------------------------------
+		//"com.naver.erp.BoardDAO.deleteBoard" 
+		//------------------------------------
+		// SQL 구문에 참여할 데이터
+		//------------------------------------
+	//	, boardDTO
+//);
+
+		int deleteCnt = sqlSession.delete("com.naver.erp.BoardDAO.deleteBoard", boardDTO);
+		
+		//------------------------------------
+		// 삭제 적용행의 개수를 리턴하기
+		//------------------------------------
+		return deleteCnt;
+	}
+
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// [1개 게시판] 수정 실행하고 수정 적용행의 개수를 리턴하는 메소드 선언
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	@Override
+	public int updateBoard(BoardDTO boardDTO) {
+		//------------------------------------
+		// SqlSessionTemplate 객체의 
+		// update 메소드를 호출하여 
+		// 수정 적용행의 개수를 얻기
+		//------------------------------------
+		//------------------------------------
+		// 실행할 SQL 구문의 위치를 지정하기
+		//------------------------------------
+			//------------------------------------
+			// xml 파일 안의 
+			// <mapper namespace="com.naver.erp.BoardDAO"> 를 가진 mapper 태그 내부에
+			// id="updateBoard" 를 가진 태그 내부의 SQL 구문
+			//------------------------------------
+	//	"com.naver.erp.BoardDAO.updateBoard" 
+		//------------------------------------
+		// SQL 구문에 참여할 데이터
+		//------------------------------------
+		//, boardDTO
+//);
+		int updateCnt = sqlSession.update("com.naver.erp.BoardDAO.updateBoard", boardDTO);
+
+		//------------------------------------
+		// 수정 적용행의 개수를 리턴하기
+		//------------------------------------
+		return updateCnt;
+	}
+
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// 1개 게시판의 존재 개수 얻기
+	// 만약 게시판의 존재 개수가 0개면 삭제되었다는 의미이다.
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	@Override
+	public int getBoardCnt(int b_no) {
+		//------------------------------------
+		// SqlSessionTemplate 객체의 
+		// selectOne 메소드를 호출하여 
+		// 1개 게시판의 존재 개수를 얻기
+		//------------------------------------
+		//------------------------------------
+		// 실행할 SQL 구문의 위치를 지정하기
+		//------------------------------------
+			//------------------------------------
+			// xml 파일 안의 
+			// <mapper namespace="com.naver.erp.BoardDAO"> 를 가진 mapper 태그 내부에
+			// id="getBoardCnt" 를 가진 태그 내부의 SQL 구문
+			//------------------------------------
+		//"com.naver.erp.BoardDAO.getBoardCnt" 
+		//------------------------------------
+		// SQL 구문에 참여할 데이터
+		//------------------------------------		
+		int boardCnt = sqlSession.selectOne("com.naver.erp.BoardDAO.getBoardCnt", b_no);
+
+		//------------------------------------
+		// 1개 게시판의 존재 개수를 리턴하기
+		//------------------------------------
+		return boardCnt;
+	}
+
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// 암호의 존재 개수를 리턴하는 메소드 선언
+	// 만약 암호의 존재 개수가 0개면 암호가 틀렸다는 의미이다.
+	// 수정 또는 삭제 버튼을 눌렀을 때 호출되는 메소드이다.
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	@Override
+	public int getBoardPwdCnt(BoardDTO boardDTO) {
+		//------------------------------------
+		// SqlSessionTemplate 객체의 
+		// selectOne 메소드를 호출하여 
+		// 암호의 존재 개수를 얻기
+		//------------------------------------
+		//------------------------------------
+		// 실행할 SQL 구문의 위치를 지정하기
+		//------------------------------------
+			//------------------------------------
+			// xml 파일 안의 
+			// <mapper namespace="com.naver.erp.BoardDAO"> 를 가진 mapper 태그 내부에
+			// id="getBoardPwdCnt" 를 가진 태그 내부의 SQL 구문
+			//------------------------------------
+		//"com.naver.erp.BoardDAO.getBoardPwdCnt" 
+		//------------------------------------
+		// SQL 구문에 참여할 데이터
+		//------------------------------------
+		int boardPwdCnt = sqlSession.selectOne("com.naver.erp.BoardDAO.getBoardPwdCnt", boardDTO);
+		
+		//------------------------------------
+		// 암호의 존재 개수를 리턴하기
+		//------------------------------------
+		return boardPwdCnt;
+	}
+
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// [조회수 증가]하고 수정한 행의 개수를 얻는 메소드 선언
+	// 상세보기 들어갈 때 호출되는 메소드
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	@Override
+	public int updateReadCount(int b_no) {
+		// -----------------------------------------
+		// SqlSessionTemplate 객체의
+		// update 메소드를 호출하여
+		// [조회수 증가]하고 수정한 행의 개수를 얻기
+		// -----------------------------------------
+		//------------------------------------
+		// 실행할 SQL 구문의 위치를 지정하기
+		//------------------------------------
+			//------------------------------------
+			// xml 파일 안의 
+			// <mapper namespace="com.naver.erp.BoardDAO"> 를 가진 mapper 태그 내부에
+			// id="updateReadcount" 를 가진 태그 내부의 SQL 구문
+			//------------------------------------
+		int updateCnt = sqlSession.update("com.naver.erp.BoardDAO.updateReadCount", b_no);
+		
+		//------------------------------------
+		// [조회수 증가]하고 수정한 행의 개수를 리턴하기
+		//------------------------------------		
+		return updateCnt;
+	}
+
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// [1개 게시판 글]을 검색 해 리턴하는 메소드 선언
+	// 매개변수로 검색할 게시판의 고유 번호가 들어온다.
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	@Override
+	public BoardDTO getBoard(int b_no) {
+		// -------------------------------------------------
+		// SqlSessionTemplate 객체의
+		// selectOne 메소드를 호출하여
+		// 1행m열의 게시판 검색 결과물을 저장한 BoardDTO 객체를 얻기
+		// -------------------------------------------------
+		BoardDTO boardDTO = sqlSession.selectOne("com.naver.erp.BoardDAO.getBoard", b_no);
+
+		//BoardDTO boardDTO  = this.sqlSession.selectOne(
+				//------------------------------------
+				// 실행할 SQL 구문의 위치를 지정하기
+				//------------------------------------
+					//------------------------------------
+					// xml 파일 안의 
+					// <mapper namespace="com.naver.erp.BoardDAO"> 를 가진 mapper 태그 내부에
+					// id="getBoard" 를 가진 태그 내부의 SQL 구문
+					//------------------------------------
+				//"com.naver.erp.BoardDAO.getBoard" 
+				//------------------------------------
+				// SQL 구문에 참여할 데이터
+				//------------------------------------
+			//	, b_no
+		//);
+		
+		// -------------------------------------------------------------
+		// 1행 m열의 게시판 검색 결과물을 저장한 BoardDTO 객체를 리턴하기
+		// -------------------------------------------------------------
+		return boardDTO;
+	}
+
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	// n행m열의 게시판 검색을 위한 getBoardList 메소드 선언하기
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	@Override
+	public List<BoardDTO> getBoardList( BoardSearchDTO boardSearchDTO ) {
+		//-----------------------------------------
+		// SqlSessionTemplate 객체의 
+		// selectList 메소드를 호출하여 n행m열의 게시판 검색 결과물을 저장한 List<BoardDTO> 객체를 얻기
+		//-----------------------------------------
+		List<BoardDTO> boardList = sqlSession.selectList(
+				//-----------------------------------------
+				// 실행할 SQL 구문의 위치를 지정하기
+				//-----------------------------------------
+					// xml 파일 안의 
+					// <mapper namespace="com.naver.erp.BoardDAO"> 를 가진 mapper 태그 내부에
+					// id="getBoardList" 를 가진 태그 내부의 SQL 구문
+					//-----------------------------------------
+				"com.naver.erp.BoardDAO.getBoardList"
+		);
+
+		//-----------------------------------------
+		// n행m열의 게시판 검색 결과물을 저장한 List<BoardDTO> 객체를 리턴하기
+		//-----------------------------------------
+		return boardList;
+	}
+}

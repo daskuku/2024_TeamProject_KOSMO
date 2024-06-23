@@ -1,0 +1,164 @@
+* {
+	font-size: 15px;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 0 auto;
+	margin-top:20px;
+}
+
+th, td {
+	padding: 10px 15px 10px 15px;
+}
+
+th {
+	background-color: #c59246e0;
+    color: white;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  overflow-x: hidden;
+}
+
+ul, ol{
+	list-style:none;
+}
+
+a{
+	text-decoration:none;
+}
+
+.searchBtn, .searchAllBtn{
+	width: 100px;
+	height: 40px;
+    background-color: #c59246e0;
+    color: #FFFFFF;
+    border-radius: 10px;
+    border: 1px solid #c59246e0;
+    cursor: pointer;
+}
+
+.searchBtn{
+	margin-right: 30px;
+}
+
+#stadiumRentAllCount{
+	text-align: center;
+    margin-left: 380px;
+}
+
+.stadiumRentFormRowCntPerPage{
+	margin-left: 980px;
+}
+
+.rowCntPerPage{
+	border: none;
+}
+
+.stadiumRentFormTopContents{
+	display: flex;
+	margin-top: 30px;
+}
+
+.stadiumRentPaging{
+	text-align: center;
+}
+
+.titleBackgoundText{
+	border-bottom: 1px solid #000000;
+	width: 55%;
+	margin: 0 auto;
+	margin-bottom: 30px;
+	font-size: 40px;
+	text-align: center;
+	padding: 40px;
+}
+
+.stadiumRentFormFontLightGray{
+	color: #999999;
+}
+
+.stadiumRentFormImageContainer{
+	margin: 30px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.stadiumRentFormBoard{
+	width: calc(25% - 20px);
+    max-width: 300px;
+    height: 380px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+.stadiumRentImageDiv {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+}
+
+.stadiumRentSubject {
+	margin-top: 10px;
+}
+
+.stadiumRentImage{
+	max-width: 100%;
+    max-height: 100%;
+    border-radius: 10px;
+}
+
+.activePageNo{
+    color: #FFFFFF;
+    background-color: #c59246e0;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    text-align: center;
+    line-height: 30px;
+}
+
+.arrowLeft {
+    color: #c59246e0;
+}
+
+.arrowLeft strong{
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.arrowRight {
+    color: #c59246e0;
+}
+
+.arrowRight strong{
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.sido, .Stadiumkeyword1, .Stadiumkeyword2, .orAnd, .sigungu{
+	height: 35px;
+	margin-right: 20px;
+	border-radius: 10px;
+	border: 1px solid #c59246e0;
+}

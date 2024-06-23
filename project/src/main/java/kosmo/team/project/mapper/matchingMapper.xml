@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosmo.team.project.dao.MatchingDAO">
+
+
+<!-- 이 쿼리를 사용하는 부분이 많다면 <sql></sql> 을 이용해서 만들어둠. 즉, 필요한 부분에 이 전체를 쓰지 않고 id 값만 호출해서 불러옴 -->
+ <sql id="boardWhere">
+    <if test="(keyword1 != null and keyword1.length() > 0)">
+      and (
+      </if>
+         <if test="keyword1 != null and keyword1.length() > 0">
+            (
+            <if test="searchType1 == 'writer'">
+               upper(mb.nickname) like upper('%${keyword1}%')
+            </if>
+            <if test="searchType1 == 'title'">
+               upper(m.title) like upper('%${keyword1}%')
+            </if>
+            <if test="searchType1== 'content'">
+               upper(m.content) like upper('%${keyword1}%')
+            </if>
+            <if test="searchType1 == 'all'">
+               upper(mb.nickname) like upper('%${keyword1}%')
+               or
+               upper(m.title) like upper('%${keyword1}%')
+               or
+               upper(m.content) like upper('%${keyword1}%')
+            </if>
+            )
+         </if>
+      <if test="(keyword1 != null and keyword1.length() > 0)">
+         )
+      </if>
+      
+      <if test="sido != null and sido>0">
+         and
+         (
+            sta.sido_name = ${sido}
+         )
+         <if test="sigungu !=null and sigungu>0 ">
+            and
+            (
+               sta.sigungu_name = ${sigungu}
+            )
+         </if>
+      </if>
+      
+      <if test="(date != null and date.length() > 0)">
+         and
+         m.day = #{date}
+      </if>
+      
+      <if test="(matchingTime != null and matchingTime>0)">
+         and
+         m.time_no = #{matchingTime}
+      </if>
+      
+   </sql>
+
+
+<!-- 
+   resultType?? 오라클의 실행결과물을 어디에 저장할것인가 설정해주는것
+   parameterType?? 밖에서 들어노는값의 자료형이 무엇인지 설정 
+   
+   무조건 DTO가 들어오고 DTO가 결과값을 다받는것은 아님. 
+   'select count(*) from 테이블명' 처럼 개수가 결과물이면 이것을 DTO에 저장하지는 않음 -> 그럼 어디에? -> 개수면 정수형 즉, int 라는 자료형에 담아서 값을 받아올수 있음. 그러면 결과물을 받는놈의 자료형도 int 겟지요?
+-->
+
+
+<!-- 
+   //매칭 게시물 가져오기 + 검색포함
+   이 오라클 실행구문이 실행되면 그 결과물을을 MatchingDTO에 담아서 보여준다. 
+   이 결과물은 n행 m열의 결과물이 나올것이기 때문에 앞에서 List<MatchingDTO>로 자료형을 설정해 둠.
+   
+   **주의**
+   오라클의 실행결과물을 MatchingDTO에 담아둔다고 설정했음. 
+   그러면 해당 DTO에는 오라클 실행결과를 저장할 변수명들이 선언이 되어 있어야함. 
+   
+   여기서 parameterType가 그냥 오라클에 있는 테이블값만 어떠한 조건 없이 가져오기 때문. 
+-->
+<select id="getMatchingList" resultType="kosmo.team.project.dto.MatchingDTO" parameterType="kosmo.team.project.dto.MatchingSearchDTO">
+      select * from ( select rownum RNUM, zxcvb.* from( 
+         select
+            m.match_no
+            ,m.title
+            ,mb.nickname
+            ,m.readcount
+            ,to_char(m.reg_date,'YYYY-MM-DD') as "reg_date"
+            ,sta.sido_name
+            ,sta.sigungu_name
+            ,m.checking
+         from
+            match m left join member mb on m.writer = mb.m_no   
+                    left join stadium sta on m.stadium = sta.stadium_no
+                    left join sido s on sta.sido_name = s.sido_id
+                    left join sigungu si on sta.sigungu_name = si.sigungu_id
+         where
+             1=1
+           <include refid="boardWhere"/> 
+           order by
+            m.match_no desc
+       <![CDATA[
+         ) zxcvb) where  RNUM  >= #{begin_rowNo}  and RNUM <= #{end_rowNo}
+      ]]>
+
+</select>
+
+
+
+<!-- 
+   //매칭 상세보기 가져오기
+-->
+<!-- 
+<select id="getMatchingDetail" resultType="kosmo.team.project.dto.MatchingDTO" parameterType="int">
+   select
+       m.title
+      ,mb.nickname
+      ,m.readcount
+      ,sta.stadium_name
+      ,to_char(bk.booking_date, 'YYYY-MM-DD') as booking_date
+      ,tt.time_range
+      ,m.content
+      ,m.match_no
+   from
+       match m left join member mb on m.writer = mb.m_no
+               left join booking bk on m.writer = bk.m_no  
+               left join stadium sta on bk.stadium_no = sta.stadium_no
+               left join time_table tt on m.time_no = tt.time_no
+   where
+      m.match_no = #{match_no}    
+       and
+       sta.stadium_name = (select unique(sta.stadium_name) from match m left join stadium sta on m.stadium = sta.stadium_no where m.stadium = (select stadium from match where match_no = #{match_no}))
+       and
+       m.time_no = (select time_no from match where match_no = #{match_no})
+       and
+       m.day = (select day from match where match_no = #{match_no}) 
+</select>
+ -->
+ 
+<select id="getMatchingDetail" resultType="kosmo.team.project.dto.MatchingDTO" parameterType="int">
+select
+   distinct m.title
+   ,mb.nickname
+   ,m.readcount
+   ,sta.stadium_no
+   ,sta.stadium_name
+   ,to_char(bk.booking_date, 'YYYY-MM-DD') as booking_date
+   ,tt.time_no
+   ,tt.time_range
+   ,m.content
+   ,m.match_no
+   ,t.team_name
+   ,t.team_no
+   ,m.checking
+from
+    match m left join member mb on m.writer = mb.m_no
+            left join booking bk on m.writer = bk.m_no  
+            left join stadium sta on bk.stadium_no = sta.stadium_no
+            left join time_table tt on m.time_no = tt.time_no
+            left join team_member tm on m.writer = tm.team_member
+            left join team t on tm.team_no = t.team_no
+where
+   m.match_no = #{match_no}     
+    and
+    sta.stadium_name = (select 
+                            unique(sta.stadium_name)
+                        from 
+                            match m left join stadium sta on m.stadium = sta.stadium_no
+                        where 
+                            m.stadium = (select stadium from match where match_no = #{match_no}) 
+                          )
+    and
+    m.time_no = (select time_no from match where match_no = #{match_no})
+    and
+    bk.booking_date = to_date( (select day from match where match_no =#{match_no}),'YYYY-MM-DD' )
+</select>
+
+
+<!-- 
+   //새글쓰기
+-->
+<insert id="regMatchingBoard" parameterType="kosmo.team.project.dto.MatchingDTO" >
+insert into match (match_no, title, writer, content, time_no, day, stadium, team_no, checking)
+ values(
+    (select nvl(max(match_no),0)+1 from match)
+    ,#{title}
+    ,#{writer}
+    ,#{content}
+    ,#{matchingTime}
+    ,#{day}
+    ,${stadium_no}
+    ,#{team_no}
+    ,'매칭대기중'
+ )
+ </insert>
+ 
+<!-- 
+   //수정,삭제 게시물 가져오기
+-->
+<!-- 주석처리 매칭 찾기 , 수정/삭제 
+ <select id="getUpdelBoard" resultType="kosmo.team.project.dto.MatchingDTO" parameterType="int">
+   select
+       distinct m.title
+      ,mb.nickname
+      ,m.readcount
+      ,sta.stadium_name
+      ,to_char(bk.booking_date, 'YYYY-MM-DD') as booking_date
+      ,tt.time_range
+      ,m.content
+      ,m.match_no
+      ,mb.m_no
+   from
+       match m left join member mb on m.writer = mb.m_no
+               left join booking bk on m.writer = bk.m_no  
+               left join stadium sta on bk.stadium_no = sta.stadium_no
+               left join time_table tt on m.time_no = tt.time_no
+   where
+      m.match_no = #{match_no}    
+       and
+       sta.stadium_name = (select unique(sta.stadium_name) from match m left join stadium sta on m.stadium = sta.stadium_no where m.stadium = (select stadium from match where match_no = #{match_no}))
+       and
+       m.time_no = (select time_no from match where match_no = #{match_no})
+       and
+       m.day = (select day from match where match_no = #{match_no})  
+</select>
+-->
+<!-- 매칭 찾기 , 수정/삭제 -->
+ <select id="getUpdelBoard" resultType="kosmo.team.project.dto.MatchingDTO" parameterType="int">
+   select
+       distinct m.title
+      ,mb.nickname
+      ,m.readcount
+      ,sta.stadium_name
+      ,to_char(bk.booking_date, 'YYYY-MM-DD') as booking_date
+      ,tt.time_range
+      ,m.content
+      ,m.match_no
+      ,mb.m_no
+   from
+       match m left join member mb on m.writer = mb.m_no
+               left join booking bk on m.writer = bk.m_no  
+               left join stadium sta on bk.stadium_no = sta.stadium_no
+               left join time_table tt on m.time_no = tt.time_no
+   where
+      m.match_no = #{match_no}
+       and
+       sta.stadium_name = (select unique(sta.stadium_name) from match m left join stadium sta on m.stadium = sta.stadium_no where m.stadium = (select stadium from match where match_no =  #{match_no}))
+       and
+       m.time_no = (select time_no from match where match_no = #{match_no})
+       and
+       to_char(bk.booking_date, 'YYYY-MM-DD') = to_char( (select day from match where match_no = #{match_no}))
+</select>
+ 
+ 
+<!-- 
+   //매칭 게시물 수정
+-->
+<!-- 주석처리 
+<update id="updateMatching" parameterType="kosmo.team.project.dto.MatchingDTO">
+update
+   match
+set
+   title=#{title},
+   sido_name=#{sido_id},
+   sigungu_name=#{sigungu_id},
+   content=#{content},
+   time_no=#{matchingTime},
+   day=#{date}
+where 
+   match_no = #{match_no}
+</update>
+ -->
+ <update id="updateMatching" parameterType="kosmo.team.project.dto.MatchingDTO">
+update
+   match
+set
+   title=#{title},
+   content=#{content},
+   time_no=#{matchingTime},
+   day=#{day},
+   stadium=#{stadium_no}
+   
+where 
+   match_no = #{match_no}
+</update>
+
+<!-- 
+   //매칭 게시물 삭제
+-->
+<delete id="deleteMatching" parameterType="kosmo.team.project.dto.MatchingDTO">
+   delete
+   from
+      match
+   where
+      match_no = #{match_no}
+</delete>
+
+
+
+<!-- 
+   //게시물 검색 개수 가져오기
+-->
+ <select id="getMatchListCnt" resultType="int" parameterType="kosmo.team.project.dto.MatchingSearchDTO">
+
+      select
+         count(*)
+      from
+         match m left join member mb on m.writer = mb.m_no   
+                left join stadium sta on m.stadium = sta.stadium_no
+                left join sido s on sta.sido_name = s.sido_id
+                left join sigungu si on sta.sigungu_name = si.sigungu_id 
+      where
+           1=1
+        <include refid="boardWhere"/>
+
+</select>
+
+<!-- 
+   //게시물 조희수 증가
+-->
+<update id="matchingDetailCnt" parameterType="int">
+   update
+      match
+   set
+      readcount = readcount + 1
+   where
+      match_no = #{match_no}
+</update>
+
+<!--주석 
+   매칭 새글쓰기 m_no를 받아 경기장명 셀렉트박스에 적용할 데이터 로드 -->
+<select id="machingStadiumSelectBoxLoad" resultType="kosmo.team.project.dto.MatchingDTO" parameterType="kosmo.team.project.dto.MatchingDTO">
+   select 
+        unique(b.stadium_no)    as "stadium_no"
+      , s.stadium_name  as "stadium_name"            
+
+   from booking b, time_table t, member m, stadium s
+   
+   where 1=1
+      and b.m_no = ${m_no}
+      and b.m_no = m.m_no
+      and b.time_slot = t.time_no
+      and b.stadium_no = s.stadium_no
+      and TO_DATE(b.booking_date, 'yyyy-mm-dd') >= TO_DATE(SYSDATE, 'yyyy-mm-dd')
+   order by b.stadium_no
+</select>
+
+<!--주석 
+   매칭 새글쓰기 m_no, stadium_no를 받아 경기날짜 셀렉트박스에 적용할 데이터 로드 -->
+<select id="machingDaySelectBoxLoad" resultType="kosmo.team.project.dto.MatchingDTO" parameterType="kosmo.team.project.dto.MatchingDTO">
+   select 
+         unique(to_char(b.booking_date,'yyyy-mm-dd')) as "booking_date"       
+
+   from booking b, time_table t, member m, stadium s
+   
+   where 1=1
+   and b.m_no = ${m_no}
+   and b.stadium_no = ${stadium_no}
+   and b.m_no = m.m_no
+   and b.time_slot = t.time_no
+   and b.stadium_no = s.stadium_no
+   and TO_DATE(b.booking_date, 'yyyy-mm-dd') >= TO_DATE(SYSDATE, 'yyyy-mm-dd')
+   order by b.stadium_no
+</select>
+
+<!--주석 
+   매칭 새글쓰기 m_no, stadium_no를 받아 경기시간 셀렉트박스에 적용할 데이터 로드 -->
+<select id="machingTimeSelectBoxLoad" resultType="kosmo.team.project.dto.MatchingDTO" parameterType="kosmo.team.project.dto.MatchingDTO">
+   select 
+           unique(t.time_no)   as "time_no"
+         , t.time_range       as "time_range"        
+
+   from booking b, time_table t, member m, stadium s
+   
+   where 1=1
+   and b.m_no = ${m_no}
+   and b.stadium_no = ${stadium_no}
+   and b.m_no = m.m_no
+   and b.time_slot = t.time_no
+   and b.stadium_no = s.stadium_no
+   and TO_DATE(b.booking_date, 'yyyy-mm-dd') >= TO_DATE(SYSDATE, 'yyyy-mm-dd')
+   order by b.stadium_no
+</select>
+
+<!-- 매칭신청 버튼을 누르면 승낙테이블에 등록된다 -->
+<insert id="regWaitingList" parameterType="kosmo.team.project.dto.MatchingDTO">
+insert
+   into 
+      waiting_matchReg
+      values(
+         #{match_team}
+         ,#{vs_team}
+         ,#{time_no}
+         ,#{day}
+         ,${stadium_no}
+      )
+</insert>
+      
+<!-- 매칭 중복신청 확인 -->
+<select id="checkOverLapMatchCnt" resultType="int" parameterType="kosmo.team.project.dto.MatchingDTO">
+   select
+         count(*)
+      from
+         waiting_matchReg
+      where
+         match_team = #{match_team}
+         and
+         vs_team = #{vs_team}
+         and
+         time_no = #{time_no}
+         and
+         to_date(day, 'YYYY-MM-DD') = to_date(#{day},'YYYY-MM-DD')
+         and
+         stadium = ${stadium_no}
+</select>     
+      
+<select id="checkMember11" resultType="int" parameterType="kosmo.team.project.dto.MatchingDTO">
+	select
+	    (select count(team_no) from team_member where team_no = #{vs_team})
+	    +
+	    (select count(team_no) from team_merc where team_no = #{vs_team})
+	from 
+	    dual
+</select>
+
+
+
+      
+      
+ 
+
+
+</mapper>

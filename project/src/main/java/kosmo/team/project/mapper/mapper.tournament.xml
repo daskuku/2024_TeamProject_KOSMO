@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosmo.team.project.dao.TournamentDAO">
+
+
+	<!-- <select id="getTournamentList" resultType="kosmo.team.project.dto.TournamentDTO" parameterType="kosmo.team.project.dto.TournamentSearchDTO">		
+		select
+			list_no 
+			,subject
+			,region
+			,to_char(regist_start,'YYYY-MM-DD') as "regist_start"
+			,to_char(regist_end,'YYYY-MM-DD') 	as "regist_end"
+		from 
+			tournament
+		where
+			1=1
+			<if test="region != null and region != '전체' and ing != null">
+				and
+				region=#{region}
+				and 
+				(to_date(#{ing},'YYYY-MM-DD') - regist_end) <![CDATA[ <0 ]]>
+			</if>
+			
+			<if test="region != null and region != '전체' and end != null">
+				and
+				region=#{region}
+				and 
+				(to_date(#{end},'YYYY-MM-DD') - regist_end)>0
+			</if>
+			
+			
+			<if test="ing != null">
+				and 
+				(to_date(#{ing},'YYYY-MM-DD') - regist_end) <![CDATA[ <0 ]]>
+			</if>
+			
+			<if test="end != null">
+				and 
+				(to_date(#{end},'YYYY-MM-DD') - regist_end)>0
+			</if>
+	</select>  -->
+	
+	<select id="getTournamentList" resultType="kosmo.team.project.dto.TournamentDTO" parameterType="kosmo.team.project.dto.TournamentSearchDTO">		
+		 select * from ( select rownum RNUM, zxcvb.* from( 
+			select
+				list_no 
+				,subject
+				,region
+				,to_char(regist_start,'YYYY-MM-DD') as "regist_start"
+				,to_char(regist_end,'YYYY-MM-DD') 	as "regist_end"
+				,to_char(reg_date,'YYYY-MM-DD')     as "reg_date"  
+				,imagename as "imagename"
+			from 
+				tournament
+			where
+				1=1
+				<if test="region != null and region != '전체' and ing != null">
+					and
+					region=#{region}
+					and 
+					(to_date(#{ing},'YYYY-MM-DD') - regist_end) <![CDATA[ <0 ]]>
+				</if>
+				
+				<if test="region != null and region != '전체' and end != null">
+					and
+					region=#{region}
+					and 
+					(to_date(#{end},'YYYY-MM-DD') - regist_end)>0
+				</if>
+				
+				
+				<if test="ing != null">
+					and 
+					(to_date(#{ing},'YYYY-MM-DD') - regist_end) <![CDATA[ <0 ]]>
+				</if>
+				
+				<if test="end != null">
+					and 
+					(to_date(#{end},'YYYY-MM-DD') - regist_end)>0
+				</if>
+				
+			      
+			<![CDATA[
+         ) zxcvb) where  RNUM  >= #{begin_rowNo}  and RNUM <= #{end_rowNo}
+      ]]>
+	</select>
+
+
+	
+	
+	<select id="recruitTeamBoardDetailForm" resultType="kosmo.team.project.dto.TournamentDTO" parameterType="int">
+          select 
+             list_no 
+			,subject
+			,region
+			,to_char(regist_start,'YYYY-MM-DD') as "regist_start"
+			,to_char(regist_end,'YYYY-MM-DD') 	as "regist_end"
+			,content
+          from 
+          	tournament
+          where
+             list_no = #{list_no}
+   </select>
+   
+    <select id="getTournamentListCnt" parameterType="kosmo.team.project.dto.TournamentSearchDTO"   resultType="int">
+      select
+          count(list_no)
+      from 
+         tournament
+       where
+          1=1
+          	<if test="region != null and region != '전체' and ing != null">
+				and
+				region=#{region}
+				and 
+				(to_date(#{ing},'YYYY-MM-DD') - regist_end) <![CDATA[ <0 ]]>
+			</if>
+			
+			<if test="region != null and region != '전체' and end != null">
+				and
+				region=#{region}
+				and 
+				(to_date(#{end},'YYYY-MM-DD') - regist_end)>0
+			</if>
+			
+			
+			<if test="ing != null">
+				and 
+				(to_date(#{ing},'YYYY-MM-DD') - regist_end) <![CDATA[ <0 ]]>
+			</if>
+			
+			<if test="end != null">
+				and 
+				(to_date(#{end},'YYYY-MM-DD') - regist_end)>0
+			</if>
+   </select>
+	
+</mapper>

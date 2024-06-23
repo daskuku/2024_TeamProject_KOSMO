@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosmo.team.project.dao.StadiumDAO">
+
+
+
+
+	<sql id="stadiumWhere">
+
+		<if
+			test="( Stadiumkeyword1 !=null and Stadiumkeyword1.length()>0) or (Stadiumkeyword2!=null and Stadiumkeyword2.length()>0)">
+			and (
+		</if>
+		<if test="Stadiumkeyword1 !=null and Stadiumkeyword1.length()>0">
+			(
+			upper(st.stadium_name) like upper('%${Stadiumkeyword1}%')
+			)
+		</if>
+		<if
+			test="( Stadiumkeyword1 !=null and Stadiumkeyword1.length()>0) and ( Stadiumkeyword2 !=null and Stadiumkeyword2.length()>0)">
+			${orand}
+		</if>
+		<if test="Stadiumkeyword2!=null and Stadiumkeyword2	.length()>0">
+			(
+			upper(st.stadium_name) like upper('%${Stadiumkeyword2}%')
+			)
+		</if>
+		
+
+
+		<if
+			test="( Stadiumkeyword1 !=null and Stadiumkeyword1.length()>0) or (Stadiumkeyword2!=null and Stadiumkeyword2.length()>0)">
+			)
+		</if>
+		
+		<if test="sido !=null and sido>0 ">
+			and
+			(
+			st.sido_name = ${sido}
+			)
+
+			<if test="sigungu !=null and sigungu>0 ">
+				and
+				(
+				st.sigungu_name = ${sigungu}
+				)
+
+
+			</if>
+
+
+		</if>
+
+	</sql>
+
+
+
+
+
+
+
+
+
+
+
+
+	<sql id="yangdoWhere">
+
+		<if
+			test="( Stadiumkeyword1 !=null and Stadiumkeyword1.length()>0) or (Stadiumkeyword2!=null and Stadiumkeyword2.length()>0)">
+			and (
+		</if>
+		<if test="(Stadiumkeyword1!=null and Stadiumkeyword1.length()>0)">
+			(
+			upper(s.stadium_name) like upper('%${Stadiumkeyword1}%')
+			)
+		</if>
+		<if
+			test="(Stadiumkeyword1!=null and Stadiumkeyword1.length()>0) and (Stadiumkeyword2!=null and Stadiumkeyword2.length()>0)">
+			${orand}
+		</if>
+		<if test="Stadiumkeyword2!=null and Stadiumkeyword2.length()>0">
+			(
+			upper(s.stadium_name) like upper('%${Stadiumkeyword2}%')
+			)
+		</if>
+		<if test="sido !=null and sido>0 ">
+			and
+			(
+			s.sido_name = ${sido}
+			)
+
+			<if test="sigungu !=null and sigungu>0 ">
+				and
+				(
+				s.sigungu_name = ${sigungu}
+				)
+			</if>
+		</if>
+		<if test="status!=null and status.size()>0">
+			<foreach collection="status" item="tmp"
+				open=" and (  " close="  ) " separator=" or ">
+
+				status = '${tmp}'
+
+			</foreach>
+		</if>
+
+
+		<if
+			test="( Stadiumkeyword1 !=null and Stadiumkeyword1.length()>0) or (Stadiumkeyword2!=null and Stadiumkeyword2.length()>0)">
+			)
+		</if>
+
+
+	</sql>
+
+
+
+
+
+
+
+
+
+
+
+	<select id="getStadiumList"
+		resultType="kosmo.team.project.dto.StadiumDTO"
+		parameterType="kosmo.team.project.dto.StadiumDTO">
+		select * from (
+		select rownum RNUM, zxcvb.* from (
+		select
+		st.stadium_no
+		AS "stadium_no"
+		,st.stadium_name AS "stadium_name"
+		,s.name
+		AS
+		"sido_name"
+		,si.name as "sigungu_name"
+		,st.detailed_address as
+		"detail_address"
+		,to_char(st.reg_date, 'YYYY-MM-DD') AS "reg_date"
+		,st.content as
+		"content"
+		,st.stadium_status as "stadium_status"
+		,imagename as "imagename"
+
+		FROM
+		stadium st
+		LEFT
+		JOIN
+		sido s ON st.sido_name = s.sido_id
+		LEFT JOIN sigungu si ON
+		st.sigungu_name = si.sigungu_id
+		where st.stadium_status != '이용불가'
+		<include refid="stadiumWhere" />
+	
+
+        <![CDATA[ ) zxcvb) where RNUM >= #{begin_rowNo} and RNUM <= #{end_rowNo} ]]>
+	</select>
+
+	<select id="getStadiumListCnt" resultType="int">
+		select
+		count(*)
+		FROM
+		stadium st
+		LEFT
+		JOIN
+		sido s ON st.sido_name = s.sido_id
+		LEFT JOIN sigungu si ON
+		st.sigungu_name = si.sigungu_id
+		where
+		st.stadium_status != '이용불가'
+
+		<include refid="stadiumWhere" />
+	</select>
+
+
+	<select id="getStadiumListAllCnt" resultType="int">
+		select
+		count(*)
+		FROM
+		stadium st
+		LEFT
+		JOIN
+		sido s ON st.sido_name = s.sido_id
+		LEFT JOIN sigungu si ON
+		st.sigungu_name = si.sigungu_id
+		where
+		st.stadium_status != '이용불가'
+		<include refid="stadiumWhere" />
+
+	</select>
+
+
+
+	<select id="getStadium" parameterType="int"
+		resultType="kosmo.team.project.dto.StadiumDTO">
+
+		select
+		st.stadium_no AS "stadium_no"
+		,st.stadium_name AS
+		"stadium_name"
+		,s.name AS "sido_name"
+		,si.name as "sigungu_name"
+		,st.detailed_address
+		as
+		"detail_address"
+		,to_char(st.reg_date,
+		'YYYY-MM-DD') AS "reg_date"
+		,st.content as "content"
+		,st.stadium_status
+		as "stadium_status"
+		,imagename as "imagename"
+
+		FROM
+		stadium st
+		LEFT JOIN sido s ON st.sido_name =
+		s.sido_id
+		LEFT JOIN
+		sigungu si ON st.sigungu_name = si.sigungu_id
+
+		where
+		stadium_no=#{stadium_no}
+	</select>
+
+	<!-- 시간테이블 -->
+
+	<select id="getTime" parameterType="int"
+		resultType="kosmo.team.project.dto.TimeDTO">
+
+		select
+		time_no as "time_no"
+		,time_range as "time_range"
+		from
+		time_table
+	</select>
+
+
+	<insert id="insertStadiumRent"
+		parameterType="kosmo.team.project.dto.RentStadiumDTO">
+		insert into booking(
+
+		booking_no
+		,stadium_no
+		,booking_date
+		,time_slot
+		,m_no
+		)
+		values ( (select
+		nvl(max(booking_no),0)+1
+		from booking)
+		,#{stadium_no}
+		,#{date}
+		,#{time_slot}
+		,#{m_no}
+		)
+	</insert>
+
+
+	<select id="getRentTimeCnt"
+		parameterType="kosmo.team.project.dto.RentStadiumDTO" resultType="int">
+		select count(*) from booking
+		where stadium_no = #{stadium_no} and
+		time_slot = #{time_slot} and booking_date = #{date}
+	</select>
+
+
+
+
+	
+
+	<!-- <select id="getRentTimeSlotCnt" parameterType="kosmo.team.project.dto.RentStadiumDTO" 
+		resultType="int"> select count(time_slot) from booking where stadium_no = 
+		#{stadium_no} group by booking_date having count(time_slot) = 11 </select> -->
+
+
+	<select id="getFullRent" parameterType="int" resultType="String">
+		select to_char(booking_date, 'yyyy-mm-dd') as booking_date
+		from booking
+		where stadium_no = #{stadium_no}
+		group by booking_date
+		having count(time_slot) = 11
+	</select>
+
+<select id="getM_no"
+		parameterType="kosmo.team.project.dto.RentStadiumDTO" resultType="int">
+		select count(*)
+		from booking
+		where m_no = #{m_no}
+		and booking_date >= sysdate
+	</select>
+
+
+
+
+
+
+	<select id="getMyStadiumList"
+		resultType="kosmo.team.project.dto.myRentStadiumDTO"
+		parameterType="kosmo.team.project.dto.myRentStadiumDTO">
+
+		select
+		b.m_no as "m_no",
+		s.stadium_no as "stadium_no",
+		s.stadium_name as "stadium_name",
+		sid.name as "sido_name",
+		sig.name as "sigungu_name",
+		s.detailed_address as "detail_address"
+		from
+		booking b
+		join stadium s on b.stadium_no = s.stadium_no
+		join sido sid on s.sido_name = sid.sido_id
+		join sigungu sig on s.sigungu_name = sig.sigungu_id
+		join member m on b.m_no = #{m_no}
+
+		where
+		s.STADIUM_STATUS != '이용불가'
+		and
+		b.m_no = #{m_no}
+		 and to_date(booking_date,'yyyy-mm-dd') >TO_DATE(SYSDATE, 'yyyy-mm-dd')
+		group by
+		b.m_no,
+		s.stadium_no,
+		s.stadium_name,
+		sid.name,
+		sig.name,
+		s.detailed_address
+		
+
+
+	</select>
+
+	<select id="getDate"
+		resultType="kosmo.team.project.dto.MyRentStaidumTimeDTO"
+		parameterType="kosmo.team.project.dto.MyRentStaidumTimeDTO">
+
+			select
+			    b.m_no AS "m_no",
+			    b.stadium_no AS "stadium_no",
+			    to_char(b.booking_date, 'yyyy-mm-dd (DY)', 'NLS_DATE_LANGUAGE=KOREAN') AS "booking_date"
+
+			from
+			    booking b
+			where
+			    b.m_no = #{m_no} AND
+			    b.stadium_no = #{stadium_no}
+			   and to_date(booking_date,'yyyy-mm-dd') >=TO_DATE(SYSDATE, 'yyyy-mm-dd')
+			group by
+			    b.m_no,
+			    b.stadium_no,
+			    to_char(b.booking_date, 'yyyy-mm-dd (DY)', 'NLS_DATE_LANGUAGE=KOREAN')
+
+
+	</select>
+	
+	
+	<select id="getTimeRanges"
+    resultType="kosmo.team.project.dto.MyRentStaidumTimeDTO"
+    parameterType="kosmo.team.project.dto.MyRentStaidumTimeDTO">
+
+    select
+        b.m_no as "m_no",
+        b.stadium_no as "stadium_no",
+        b.time_slot as "time_slot",
+        t.time_range as "time_range"
+    from
+        booking b
+        join time_table t on b.time_slot = t.time_no
+    where
+        b.m_no = #{m_no} 
+        and b.stadium_no = #{stadium_no} 
+        and b.booking_date = to_date(#{booking_date}, 'yyyy-mm-dd')
+        and booking_date >=TO_DATE(SYSDATE, 'yyyy-mm-dd')
+
+</select>
+
+
+
+<!-- 양도 -->
+
+
+
+	<insert id="insertStadiumYangdo" parameterType="kosmo.team.project.dto.MyRentStaidumTimeDTO">
+    insert into stadium_yangdo (
+        yangdo_no,
+        title,
+        writer,
+        content,
+        readcount,
+        booking_no
+    )
+    values (
+        (
+            select nvl(max(yangdo_no), 0) + 1
+            from stadium_yangdo
+        ),
+        #{title},
+        #{m_no},
+        #{content},
+        0,
+        (
+            select booking_no
+            from booking
+            where stadium_no = #{MyStadium} 
+            and booking_date = to_date(#{MyDate}, 'yyyy-mm-dd') 
+            and time_slot = #{MyTimeRange}
+        )
+    )
+</insert>
+
+
+	
+
+	<select id="getYangdoCnt"
+		parameterType="kosmo.team.project.dto.YangdoDTO" resultType="int">
+		select count(*) from stadium_yangdo
+		
+		where booking_no = (
+			select 
+				booking_no 
+			from booking  
+			where 
+				m_no = #{m_no}				
+				and stadium_no = #{MyStadium} 
+		        and booking_date = to_date(#{MyDate},'yyyy-mm-dd') 
+		        and time_slot = #{MyTimeRange} )
+		      	and STATUS = '양도중'
+		
+	</select>
+	
+	
+	<select id="getMatchStadiumCnt"
+		parameterType="kosmo.team.project.dto.YangdoDTO" resultType="int">
+		select 
+            count(*) 
+        from 
+            match
+        where 
+            
+             stadium = (select 
+                stadium_no
+                from
+                    booking
+                where 
+                    stadium_no = #{MyStadium}
+                    and 
+                    booking_date = to_date(#{MyDate},'yyyy-mm-dd')
+                    and
+                    time_slot = #{MyTimeRange}
+                    and
+                    m_no = #{m_no}        )
+	</select>
+	
+	<select id="getStadiumStatus"
+		parameterType="kosmo.team.project.dto.YangdoDTO" resultType="int">
+		select count(*) from stadium
+		
+		where
+			stadium_no = #{MyStadium}
+			and 
+			stadium_status = '이용불가'
+					
+	</select>
+	
+	
+	
+		<select id="getUpStadiumStatus"
+		parameterType="kosmo.team.project.dto.YangdoDTO" resultType="int">
+		select count(*) from stadium
+		
+		where
+			stadium_no = (select
+					stadium_no
+					from
+					booking
+					where			
+			booking_no = #{booking_no}
+			
+			
+			)
+		
+			and 
+			stadium_status = '이용불가'
+					
+	</select>
+	
+	
+	<select id="getSincheongStadiumStatus"
+		parameterType="kosmo.team.project.dto.YangdoDTO" resultType="int">
+		select count(*) from stadium
+		
+		where
+			stadium_no = (select
+					stadium_no
+					from
+					booking
+					where			
+			booking_no = #{booking_no}
+			
+			
+			)
+		
+			and 
+			stadium_status = '이용불가'
+					
+	</select>
+	
+	
+	
+	
+	<!--  양도리스트 -->
+	
+	<select id="getStadiumYangdoList"
+		resultType="kosmo.team.project.dto.YangdoDTO"
+		parameterType="kosmo.team.project.dto.YangdoSearchDTO">
+		select * from ( select rownum RNUM, zxcvb.* from (
+
+		select
+		sy.yangdo_no AS "yangdo_no",
+		sy.title AS "title",
+		sy.writer AS "writer",
+		m.nickname as "nickname",
+		sy.content AS "content",
+		to_char(sy.reg_date, 'YYYY-MM-DD') AS "reg_date",
+		sy.readcount AS "readcount",
+		sy.booking_no as "booking_no",
+		s.STADIUM_STATUS as "stadium_status",
+		sy.status as "status"
+		FROM
+		stadium_yangdo sy join member m on m.m_no = sy.writer
+		JOIN BOOKING B ON sy.BOOKING_NO = B.BOOKING_NO
+		JOIN STADIUM S ON B.STADIUM_NO = S.STADIUM_NO
+		join sido si on s.sido_name = si.sido_id
+		join sigungu sg on s.sigungu_name = sg.sigungu_id
+		where 1=1
+		<include refid="yangdoWhere" />
+		    	order by sy.yangdo_no desc	
+		    <![CDATA[
+			) zxcvb) where  RNUM  >= #{begin_rowNo}  and RNUM <= #{end_rowNo}
+		]]>
+	</select>
+	
+	
+	
+	
+
+	<select id="getStadiumYangdoListCnt" resultType="int">
+		select
+		count(*)
+		FROM STADIUM_YANGDO sy
+		JOIN BOOKING B ON sy.BOOKING_NO = B.BOOKING_NO
+		JOIN STADIUM S ON B.STADIUM_NO = S.STADIUM_NO
+		join sido si on s.sido_name = si.sido_id
+		join sigungu sg on s.sigungu_name = sg.sigungu_id
+		where 1=1
+		<include refid="yangdoWhere" />
+	</select>
+
+
+	<select id="getMemberListAllCnt" resultType="int">
+		select count(*)
+		from
+		stadium_yangdo	
+		where 1=1
+
+	</select>
+	
+	<!-- 양도디테일 -->
+	
+		<select id="getStadiumYangdo" parameterType="int"
+		resultType="kosmo.team.project.dto.YangdoDTO">
+
+		select
+		sy.booking_no as "booking_no",
+			sy.yangdo_no as "yangdo_no",
+              sy.title as "title",
+              sy.writer as "writer",
+              m.nickname as "nickname",
+              sy.content as "content",
+              sy.readcount as "readcount",
+              to_char(b.booking_date, 'yyyy-mm-dd (DY)', 'NLS_DATE_LANGUAGE=KOREAN') as "yangdo_date",
+              b.stadium_no as "stadium_no",
+              b.time_slot as "time_slot",
+              t.time_range as "yangdo_time", 
+              st.stadium_name as "yangdo_stadium",
+              s.name as "yangdo_sido",
+              sg.name as "yangdo_sigungu",
+              to_char(sy.reg_date,'YYYY-MM-DD') AS "reg_date",
+              sy.status as "status"
+              ,sy.transferred_to as transferred_to
+  	
+              from
+               stadium_yangdo sy
+               join member m ON m.m_no = sy.writer
+               join booking b on b.booking_no = sy.booking_no
+               join stadium st on b.stadium_no = st.stadium_no  
+               join time_table t on t.time_no = b.time_slot 
+               join sido s on st.sido_name = s.sido_id 
+               join sigungu sg on st.sigungu_name = sg.sigungu_id
+		where
+		 yangdo_no = #{yangdo_no}
+
+	</select>
+	
+	
+	<update id="updateStadiumYangdo" parameterType="int">
+
+		update
+		stadium_yangdo
+		set
+		readcount = readcount +1 where yangdo_no = #{yangdo_no}
+
+
+
+	</update>
+	
+	
+	<select id="getYangdoDate"
+		resultType="kosmo.team.project.dto.MyYangdoStaidumTimeDTO"
+		parameterType="kosmo.team.project.dto.MyYangdoStaidumTimeDTO">
+
+			select
+			    b.m_no AS "m_no",
+			    b.stadium_no AS "stadium_no",
+			    to_char(b.booking_date, 'yyyy-mm-dd (DY)', 'NLS_DATE_LANGUAGE=KOREAN') AS "booking_date"
+
+			from
+			    booking b
+			where
+			    b.m_no = #{m_no} AND
+			    b.stadium_no = #{stadium_no}
+			    and to_date(booking_date,'yyyy-mm-dd') >TO_DATE(SYSDATE, 'yyyy-mm-dd')
+			group by
+			    b.m_no,
+			    b.stadium_no,
+			    to_char(b.booking_date, 'yyyy-mm-dd (DY)', 'NLS_DATE_LANGUAGE=KOREAN')
+
+
+	</select>
+	
+	<select id="getYangdoTimeRanges"
+    resultType="kosmo.team.project.dto.MyYangdoStaidumTimeDTO"
+    parameterType="kosmo.team.project.dto.MyYangdoStaidumTimeDTO">
+
+    select
+        b.m_no as "m_no",
+        b.stadium_no as "stadium_no",
+        b.time_slot as "time_slot",
+        t.time_range as "time_range"
+    from
+        booking b
+        join time_table t on b.time_slot = t.time_no
+    where
+        b.m_no = #{m_no} 
+        and b.stadium_no = #{stadium_no} 
+        and b.booking_date = to_date(#{booking_date}, 'yyyy-mm-dd')
+        and booking_date >TO_DATE(SYSDATE, 'yyyy-mm-dd')
+
+</select>
+	
+	<!-- 양도삭제 -->
+	<select id="getYangdoDelCnt" parameterType="int"
+		resultType="int">
+		select
+		count(*) from stadium_yangdo where yangdo_no=#{yangdo_no}
+	</select>
+
+
+	<delete id="deleteYangdo"
+		parameterType="kosmo.team.project.dto.YangdoDTO">
+		delete from
+		stadium_yangdo
+		where
+		yangdo_no=#{yangdo_no}
+		<!-- ========================================== #{b_no} 뜻 ========================================== 
+			=============== {b_no} 의미 =============== SQL 문에 참여할 BoardDTO 객체 안의 멤버변수 
+			b_no 안의 데이터를 표현하기 즉 게시판 번호를 표현하기 =============== # 의미 =============== 표현할 
+			데이터가 문자라면 표현할 때 앞뒤에 ' 를 붙인다. 숫자라면 표현할 때 앞뒤에 ' 를 붙이지 않는다. -->
+	</delete>
+	
+	<update id="updateYangdo"
+        parameterType="kosmo.team.project.dto.YangdoDTO">
+
+    update stadium_yangdo set
+        title = #{title},
+        content = #{content}
+       <if test="(stadium_no != null and stadium_no > 0) and (booking_date != null and booking_date != '선택') and (time_slot != null and time_slot >0)">
+        , booking_no = (
+            select booking_no 
+            from booking 
+            where stadium_no = #{stadium_no}
+              and booking_date = to_date(#{booking_date},'yyyy-mm-dd')
+              and time_slot = #{time_slot}
+              and m_no = #{m_no}
+        )
+        </if>
+    where yangdo_no = #{yangdo_no}
+
+</update>
+	
+	<select id="getYangdoUpCnt" parameterType="kosmo.team.project.dto.YangdoDTO" resultType="int">
+		   select count(*) from stadium_yangdo
+		   where  
+		   1=1
+        	and
+        	booking_no = (
+            select booking_no 
+            from booking 
+            where stadium_no = #{stadium_no}
+              and booking_date = to_date(#{booking_date},'yyyy-mm-dd')
+              and time_slot = #{time_slot}
+              and m_no = #{m_no}
+        )
+        and STATUS = '양도중'
+		
+
+	</select>
+	
+	<update id="updateSincheong"
+        parameterType="kosmo.team.project.dto.YangdoDTO">
+
+    update stadium_yangdo set
+    	title =  title  || '(양도완료)',
+        STATUS = '양도완료',
+       TRANSFERRED_TO = (  select m_no from member where m_no = #{m_no} )
+       
+		where 1=1
+		and
+        	yangdo_no = #{yangdo_no}
+
+
+	</update>
+	
+	<select id="getCheckStatusDelCnt" parameterType="int"
+		resultType="int">
+		select
+		count(*) from stadium_yangdo where yangdo_no=#{yangdo_no} and STATUS = '양도완료'
+	</select>
+	
+	<select id="getCheckStatusUpCnt" parameterType="int"
+		resultType="int">
+		select
+		count(*) from stadium_yangdo where yangdo_no=#{yangdo_no} and STATUS = '양도완료'
+	</select>
+	
+	
+	
+	<!-- 양도신청버튼누르면 예약테이블 m_no 수정 -->
+	<update id="updateBooking"
+        parameterType="kosmo.team.project.dto.YangdoDTO">
+
+    update booking set
+        m_no = #{m_no}
+       
+		where 1=1
+		and
+        	booking_no = #{booking_no}
+
+
+	</update>
+
+</mapper>

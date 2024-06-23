@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosmo.team.project.dao.LoginDAO">
+	<select id="getmidpwdCnt" parameterType="java.util.HashMap" resultType="int">
+		select count(*) from member where mid=#{mid} and password=#{password}
+	</select>
+	
+	<select id="getNickname" resultType="String">
+		select nickname from member where mid=#{mid}
+	</select>
+	
+	<select id="getEmail" resultType="String">
+		select email from member where mid=#{mid}
+	</select>
+	
+	<select id="getM_no" resultType="int">
+		select m_no from member where mid=#{mid}
+	</select>
+	
+	<select id="getMemberInfo" parameterType="map" resultType="map">
+		select 
+			mid as "mid",
+		    password as "password"
+		 from 
+		 	member
+		 where
+		    name = #{name}
+		    and
+		    phone = #{phone}
+	</select>
+	
+	<update id="updatePassword">
+	    update member
+	    set password = #{pwd}
+	    where mid = #{mid}
+	</update>
+</mapper>

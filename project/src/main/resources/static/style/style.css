@@ -1,0 +1,285 @@
+@charset "UTF-8";
+
+/* ************************ */
+/* 모든 태그의 글자 크기 15px 로 하기 */
+/* ************************ */
+* {
+	font-size: 15px;
+}
+
+/* ************************ */
+/* 모든 table 태그의 경계선을   단일선으로 통일하기*/
+/* 모든 table 태그의 경계선색을 gray 로 하기*/
+/* ************************ */
+table {
+	border-collapse: collapse;
+	border-color: gray;
+}
+
+/* ************************ */
+/* 모든 th,td 태그의 상.우.하.좌 여백 지정하기     */
+/* 모든 th,td 태그의 경계선색을  gray 로 하기 */
+/* ************************ */
+th, td {
+	padding: 10px 15px 10px 15px;
+	border-color: gray;
+}
+
+/* ************************ */
+/* 모든 th 태그의 배경색은 lightgray 로 하기*/
+/* ************************ */
+th {
+	background-color: lightgray;
+}
+
+/* ************************ */
+/* class$='ListTable' 가진 모든 태그의 후손 tr 중에 
+	2n+1 번째의 tr 태그의 배경색은 #e4e4e4 하기.
+	이때 n 자리에는 1부터 1씩 증가된 번호가 들어 간다.
+	<첨부>클래스명이 ~ListTable 로 끝나는 걸 선택한다. */
+/* ************************ */
+[class$='ListTable'] tr:nth-child(2n+1) {
+	background-color: #e4e4e4;
+}
+
+/* ************************ */
+/* class$='ListTable' 가진 태그의 후손 tr 중에 
+	n+1 번째의 tr 태그의 마우스온 시 배경색을 #e4e4e4 하기
+	이때 n 자리에는 1부터 1씩 증가된 번호가 들어 간다. */
+/* ************************ */
+[class$='ListTable'] tr:nth-child(n+1):hover {
+	background-color: #b7ffff;
+}
+
+ul li,
+ol li{
+	list-style: none;
+}
+
+a{
+	text-decoration: none;
+	color: inherit;
+}
+
+
+html,
+body {
+  /* width: 100%;
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  overflow: hidden; */
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.headerLogo{
+    height: 50px;
+    width: 150px;
+    margin-right: 100px;
+}
+
+.container {
+    height: 100%;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+
+.section {
+    height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    border: 1px solid #ccc;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+nav ul li {
+    position: relative;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.nav-item ul {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 0;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow-x: auto;
+    max-height: 200px;
+    margin-right: 100px;
+}
+
+.nav-item:hover ul {
+    display: block;
+}
+
+.nav-item:hover a {
+    color: #ffd700;
+}
+
+.nav-item ul li {
+    padding: 10px;
+}
+
+.nav-item ul li+li {
+    border-top: 1px solid #ccc;
+}
+
+.auth-links {
+    margin-left: auto;
+}
+
+.auth-links a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 14px;
+    border-top: 3px solid #f0f0f0;
+}
+
+.gnb-container {
+    position: fixed;
+    top:137px;
+    left: 0px;
+    visibility: visible;
+    opacity: 1;
+    transform: translate3d(0, -150%, 0);
+    z-index: 99;
+    width: 100vw;
+    background-color: #333;
+    box-shadow: 1px 0px 3px 0px rgba(0,0,0,0.5);
+    transition: transform 120ms ease-in-out 40ms, box-shadow 120ms linear 40ms;
+}
+.gnb-container.active {
+    transition: transform 280ms ease-in-out 0ms, box-shadow 200ms linear 0ms;
+    box-shadow: 3px 0px 14px 0px rgba(0,0,0,0.5);
+    transform: translate3d(0, 0, 0);
+}
+
+.gnb-inner {
+    width: 1400px;
+    margin: 0 auto;
+}
+
+.item-category .item-category-title {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.gnb-inner>ul::before {
+    content: " ";
+    display: table;
+}
+
+.gnb-inner>ul::after {
+    content: " ";
+    display: table;
+}
+
+.gnb-inner>ul {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 60px;
+}
+
+.gnb-inner .gnb-category {
+    float: left;
+    width: calc(74% / 6);
+    padding: 0 30px;
+}
+
+.gnb-inner .gnb-category>a {
+    color: #ffa07a;
+    display: block;
+    padding: 30px 0px 14px;
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #f08080;
+    text-align: center;
+}
+
+.gnb-inner .gnb-category>ul {
+    padding-top: 25px;
+    opacity: 0;
+    transition: opacity 60ms ease-in-out 0ms;
+    display: block;
+}
+.gnb-container.active .gnb-inner .gnb-category>ul {
+    opacity: 1;
+    transition: opacity 500ms ease-in-out 220ms;
+}
+
+.gnb-category>ul>li>a {
+    display: block;
+    padding: 3px 0;
+    font-size: 14px;
+    cursor: pointer;
+    color: #deb887;
+}
+
+#sectionMain{
+	background-color:red;
+}
+
+#sectionStatistics{
+	background-color:orange;
+}
+
+#sectionRanking{
+	background-color:yellow;
+}
+
+#sectionSchedule{
+	background-color:green;
+}
+
+#sectionMedia{
+	background-color:blue;
+}
+
+.auth-links{
+	margin-left:500px;
+}

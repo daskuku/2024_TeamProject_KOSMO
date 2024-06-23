@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosmo.team.project.dao.MainDAO">
+
+	<!-- 메인 페이지 갤러리 section -->
+	
+	<select id="getImageBoardList" resultType="kosmo.team.project.dto.MainDTO" parameterType="kosmo.team.project.dto.MainDTO">
+		    SELECT 
+		        subject AS "subject",
+		        writer AS "writer",
+		        to_char(reg_date, 'YYYY-MM-DD') AS "reg_date",
+		        readcount AS "readcount",
+		        imagename AS "imagename"
+		    FROM 
+		        imageboard
+	</select>
+	
+	<select id="getImageBoardListCnt" resultType="int">
+		select 
+			count(*) 
+		from
+		    imageboard
+	</select>
+	
+	<!-- 메인 페이지 통계 section -->
+	
+	<select id="getRegionRatio" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+		    SUM(CASE WHEN sido_id = 1 THEN 1 ELSE 0 END) AS "count_gangwondo",
+		    SUM(CASE WHEN sido_id = 2 or sido_id = 11 THEN 1 ELSE 0 END) AS "count_gyeonggido",
+		    SUM(CASE WHEN sido_id = 3 or sido_id = 4 or sido_id = 6 or sido_id = 8 or sido_id = 10 THEN 1 ELSE 0 END) AS "count_gyeongsangdo",
+		    SUM(CASE WHEN sido_id = 5 or sido_id = 12 or sido_id = 13 THEN 1 ELSE 0 END) AS "count_jeollado",
+		    SUM(CASE WHEN sido_id = 7 or sido_id = 15 or sido_id = 16 THEN 1 ELSE 0 END) AS "count_chungcheongdo",
+		    SUM(CASE WHEN sido_id = 9 THEN 1 ELSE 0 END) AS "count_seoul",
+		    SUM(CASE WHEN sido_id = 14 THEN 1 ELSE 0 END) AS "count_jejudo"
+		FROM
+		    member
+	</select>
+	
+	<select id="getGenderRatio" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+		    SUM(CASE WHEN gender = '남' THEN 1 ELSE 0 END) AS "count_men",
+		    SUM(CASE WHEN gender = '여' THEN 1 ELSE 0 END) AS "count_women"
+		FROM
+		    member
+	</select>
+	
+	<select id="getAgeRatio" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 10 AND 19) THEN 1 ELSE 0 END) AS "count_10",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 20 AND 29) THEN 1 ELSE 0 END) AS "count_20",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 30 AND 39) THEN 1 ELSE 0 END) AS "count_30",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 40 AND 49) THEN 1 ELSE 0 END) AS "count_40",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 50 AND 59) THEN 1 ELSE 0 END) AS "count_50",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 60 AND 69) THEN 1 ELSE 0 END) AS "count_60",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 70 AND 79) THEN 1 ELSE 0 END) AS "count_70",
+		    SUM(CASE WHEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(birthdate, 'YYYY'))) BETWEEN 80 AND 89) THEN 1 ELSE 0 END) AS "count_80"
+		FROM
+		    member
+	</select>
+	
+	
+	<!-- 메인 페이지 랭킹 section -->
+	
+	<select id="getRecordsGoalRatingTabAll" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_for as "goals_for"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		ORDER BY 
+			p.goals_for DESC
+	</select>
+	
+	<select id="getRecordsWinRatingTabAll" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.wins as "wins"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		ORDER BY 
+			p.wins DESC
+	</select>
+	
+	<select id="getRecordsAssistRatingTabAll" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_assist as "goals_assist"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		ORDER BY 
+			p.goals_assist DESC
+	</select>
+	
+	<select id="getRecordsGoalRatingTabRegion" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_for as "goals_for"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		    <if test="sido_id != null">
+		    	and
+		    	m.sido_id=#{sido_id}
+		    </if>
+		ORDER BY 
+			p.goals_for DESC
+	</select>
+	
+	<select id="getRecordsWinRatingTabRegion" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.wins as "wins"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		    <if test="sido_id != null">
+		    	and
+		    	sido_id=#{sido_id}
+		    </if>
+		ORDER BY 
+			p.wins DESC
+	</select>
+	
+	<select id="getRecordsAssistRatingTabRegion" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_assist as "goals_assist"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		    <if test="sido_id != null">
+		    	and
+		    	sido_id=#{sido_id}
+		    </if>
+		ORDER BY 
+			p.goals_assist DESC
+	</select>
+	
+	<select id="getRecordsGoalRatingTabGender" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_for as "goals_for"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		   <if test="gender != null">
+		    	and
+		    	m.gender='${gender}'
+		    </if>
+		ORDER BY 
+			p.goals_for DESC
+	</select>
+	
+	<select id="getRecordsWinRatingTabGender" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.wins as "wins"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		    <if test="gender != null">
+		    	and
+		    	m.gender='${gender}'
+		    </if>
+		ORDER BY 
+			p.wins DESC
+	</select>
+	
+	<select id="getRecordsAssistRatingTabGender" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_assist as "goals_assist"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		    <if test="gender != null">
+		    	and
+		    	m.gender='${gender}'
+		    </if>
+		ORDER BY 
+			p.goals_assist DESC
+	</select>
+	
+	<select id="getRecordsGoalRatingTabAge" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_for as "goals_for"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		   <choose>
+	            <when test="age != null and age == '10대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 10 AND 19)
+	            </when>
+	            <when test="age != null and age == '20대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 20 AND 29)
+	            </when>
+	            <when test="age != null and age == '30대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 30 AND 39)
+	            </when>
+	            <when test="age != null and age == '40대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 40 AND 49)
+	            </when>
+	            <when test="age != null and age == '50대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 50 AND 59)
+	            </when>
+	            <when test="age != null and age == '60대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 60 AND 69)
+	            </when>
+	            <when test="age != null and age == '70대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 70 AND 79)
+	            </when>
+	            <when test="age != null and age == '80대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 80 AND 89)
+	            </when>
+	        </choose>
+		ORDER BY 
+			p.goals_for DESC
+	</select>
+	
+	<select id="getRecordsWinRatingTabAge" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.wins as "wins"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		    <choose>
+	            <when test="age != null and age == '10대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 10 AND 19)
+	            </when>
+	            <when test="age != null and age == '20대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 20 AND 29)
+	            </when>
+	            <when test="age != null and age == '30대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 30 AND 39)
+	            </when>
+	            <when test="age != null and age == '40대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 40 AND 49)
+	            </when>
+	            <when test="age != null and age == '50대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 50 AND 59)
+	            </when>
+	            <when test="age != null and age == '60대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 60 AND 69)
+	            </when>
+	            <when test="age != null and age == '70대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 70 AND 79)
+	            </when>
+	            <when test="age != null and age == '80대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 80 AND 89)
+	            </when>
+	        </choose>
+		ORDER BY 
+			p.wins DESC
+	</select>
+	
+	<select id="getRecordsAssistRatingTabAge" resultType="kosmo.team.project.dto.RecordsDTO" parameterType="kosmo.team.project.dto.RecordsDTO">
+		SELECT
+			m.nickname AS "nickname",
+			p.goals_assist as "goals_assist"
+		FROM 
+			member m, player_record p
+		where
+		    p.player = m.m_no
+		    <choose>
+	            <when test="age != null and age == '10대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 10 AND 19)
+	            </when>
+	            <when test="age != null and age == '20대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 20 AND 29)
+	            </when>
+	            <when test="age != null and age == '30대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 30 AND 39)
+	            </when>
+	            <when test="age != null and age == '40대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 40 AND 49)
+	            </when>
+	            <when test="age != null and age == '50대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 50 AND 59)
+	            </when>
+	            <when test="age != null and age == '60대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 60 AND 69)
+	            </when>
+	            <when test="age != null and age == '70대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 70 AND 79)
+	            </when>
+	            <when test="age != null and age == '80대'">
+	                AND ((TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - TO_NUMBER(TO_CHAR(m.birthdate, 'YYYY'))) BETWEEN 80 AND 89)
+	            </when>
+	        </choose>
+		ORDER BY 
+			p.goals_assist DESC
+	</select>
+	
+	<!-- 메인 페이지 대회 일정 section -->
+	
+	<select id="getMainTournamentList" resultType="kosmo.team.project.dto.MainDTO" parameterType="kosmo.team.project.dto.MainDTO">		
+		select
+			list_no 
+			,subject
+			,region
+			,to_char(regist_start,'YYYY-MM-DD') as "regist_start"
+			,to_char(regist_end,'YYYY-MM-DD') 	as "regist_end"
+			,imagename
+		from 
+			tournament
+	</select>
+	
+	<!-- FAQ 페이지 -->
+	
+	<select id="getCustomerServiceList" resultType="kosmo.team.project.dto.MainDTO" parameterType="kosmo.team.project.dto.MainDTO">
+	    SELECT 
+		    c.customerservice_categoryname AS "customerservice_categoryname",
+		    s.customerservice_subject AS "customerservice_subject",
+		    s.customerservice_content AS "customerservice_content"
+		FROM 
+		    customerservice s, customerservice_category c
+        WHERE 
+        	s.customerservice_categoryno = c.customerservice_categoryno    
+	</select>
+	
+	<select id="getCustomerServiceCategoryList" resultType="kosmo.team.project.dto.MainDTO" parameterType="kosmo.team.project.dto.MainDTO">
+	    SELECT 
+		    customerservice_categoryno AS "customerservice_categoryno",
+		    customerservice_categoryname AS "customerservice_categoryname"
+		FROM 
+		    customerservice_category
+	</select>
+	
+	<!-- QnA 페이지 -->
+	<select id="getCustomerServiceQnABoardList" resultType="kosmo.team.project.dto.MainDTO" parameterType="kosmo.team.project.dto.MainSearchDTO">
+	 	SELECT 
+	 		* 
+		FROM 
+		     (SELECT 
+		     	ROWNUM RNUM, 
+		        zxcvb.*
+		      FROM
+		        (SELECT 
+		        	q.b_no AS "b_no",
+		        	q.subject AS "subject", 
+                    m.nickname AS "writer", 
+                    q.content AS "content", 
+                    to_char(q.reg_date, 'YYYY-MM-DD') AS "reg_date", 
+                    q.readcount AS "readcount",
+                    m.password AS "password",
+                    m.mid AS "mid" 
+               	 FROM 
+               	 	qnaboard q, 
+                    MEMBER m 
+              	 WHERE 
+              	 	q.writer = m.m_no 
+           		 ORDER BY 
+           		 	b_no desc 
+           		 
+      <![CDATA[ ) zxcvb 
+		     ) 
+		WHERE 
+			RNUM >= #{begin_rowNo} 
+		    AND 
+		    RNUM <= #{end_rowNo}
+	  ]]>		
+	</select>
+	
+	<select id="getCustomerServiceQnABoardListCnt" resultType="int">
+		select count(*) from qnaboard
+	</select>
+	
+	<select id="getCustomerServiceQnABoardListAllCnt" resultType="int">
+		select count(*) from qnaboard
+	</select>
+	
+	<select id="getCustomerServiceDetail" parameterType="int" resultType="kosmo.team.project.dto.CustomerServiceDetailDTO">
+	    SELECT
+	    	q.b_no AS "b_no",
+	        q.subject AS "subject",
+	        m.nickname AS "writer",
+	        q.content AS "content",
+	        TO_CHAR(q.reg_date, 'YYYY-MM-DD') AS "reg_date",
+	        q.readcount AS "readcount"
+	    FROM
+	        qnaboard q,
+	        MEMBER m
+	    WHERE
+	        q.writer = m.m_no
+	        AND q.b_no = #{b_no}
+	</select>
+	
+	<update id="updateCustomerServiceDetailFormReadCountPlusOne" parameterType="int">
+		update
+			qnaboard
+		set
+			readcount = readcount + 1
+		where
+			b_no = #{b_no}
+	</update>
+	
+	<select id="getSubject" parameterType="int" resultType="kosmo.team.project.dto.CustomerServiceDetailDTO">
+		select subject from qnaboard where b_no = #{b_no}
+	</select>
+	
+	<insert id="insertQnABoard" parameterType="kosmo.team.project.dto.MainDTO">
+		insert into
+			qnaboard (
+			b_no
+			,subject
+			,writer
+			,readcount
+			,content
+		) values (
+			(select nvl(max(b_no),0)+1 from qnaboard),
+			#{subject},
+			(select m_no from member where nickname = '${writer}'),
+			0,
+			#{content}
+		)
+	</insert>
+	
+	<insert id="insertQnAComment" parameterType="kosmo.team.project.dto.CustomerServiceDetailDTO">
+		insert into
+			qnaboard_comment (
+			bc_no
+			,writer
+			,content
+			,reg_date
+			,subject
+			,c_no
+		) values (
+			(select b_no from qnaboard where b_no = #{b_no}),
+			'관리자',
+			#{content},
+			sysdate,
+			(select subject || '(답변)' from qnaboard where b_no = #{b_no}),
+			(select nvl(max(c_no),0)+1 from qnaboard_comment)
+		)
+	</insert>
+	
+	<select id="getCustomerServiceQnADetailComment" parameterType="kosmo.team.project.dto.CustomerServiceDetailDTO" resultType="kosmo.team.project.dto.CustomerServiceDetailDTO">
+	    SELECT
+	    	bc_no AS "bc_no",
+	        writer AS "writer",
+	        content AS "content",
+	        TO_CHAR(reg_date, 'YYYY-MM-DD') AS "reg_date",
+	        subject AS "subject",
+	        c_no AS "c_no"
+	    FROM
+	        qnaboard_comment
+	    WHERE
+	        #{b_no} = bc_no
+	    order by
+	    	reg_date desc
+	</select>
+	
+	<select id="customerServiceQnAUpdateForm" parameterType="int" resultType="kosmo.team.project.dto.CustomerServiceDetailDTO">
+	    SELECT
+	    	q.b_no AS "b_no",
+	        q.subject AS "subject",
+	        m.nickname AS "writer",
+	        q.content AS "content",
+	        TO_CHAR(q.reg_date, 'YYYY-MM-DD') AS "reg_date",
+	        q.readcount AS "readcount"
+	    FROM
+	        qnaboard q,
+	        MEMBER m
+	    WHERE
+	        q.writer = m.m_no
+	        AND q.b_no = #{b_no}
+	</select>
+	
+	<update id="customerServiceQnAUpdate" parameterType="kosmo.team.project.dto.CustomerServiceDetailDTO">
+		update
+			qnaboard
+		set
+			subject = #{subject},
+			content = #{content}
+		where 
+			b_no = #{b_no}
+	</update>
+	
+	<delete id="customerServiceQnADelete" parameterType="int">
+		DELETE FROM qnaboard WHERE b_no = #{b_no}
+	</delete>
+	
+	<update id="customerServiceQnACommentUpdate" parameterType="kosmo.team.project.dto.CustomerServiceDetailDTO">
+		update
+			qnaboard_comment
+		set
+			content = #{content}
+		where 
+			c_no = #{c_no}
+	</update>
+	
+	<delete id="customerServiceQnACommentDelete" parameterType="int">
+		DELETE FROM qnaboard_comment WHERE c_no = #{c_no}
+	</delete>
+</mapper>

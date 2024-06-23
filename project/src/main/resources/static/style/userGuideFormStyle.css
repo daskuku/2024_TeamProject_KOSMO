@@ -1,0 +1,620 @@
+* {
+	font-size: 18px;
+}
+
+table {
+	border-collapse: collapse;
+	border-color: gray;
+	margin: 0 auto;
+	margin-top:20px;
+}
+
+th, td {
+	padding: 10px 15px 10px 15px;
+}
+
+th {
+	background-color: #c59246e0;
+    color: white;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  overflow-x: hidden;
+}
+
+ul, ol{
+	list-style:none;
+}
+
+a{
+	text-decoration:none;
+}
+
+.titleBackgoundText{
+	border-bottom: 1px solid #000000;
+	width: 55%;
+	margin: 0 auto;
+	margin-bottom: 30px;
+	font-size: 40px;
+	text-align: center;
+	padding: 40px;
+}
+
+footer{
+	width: 100%;
+	flex: 10
+}
+
+/* TAB CSS*/
+
+.userGuideCategoryTab{
+	width: 100%;
+	height: 100%;
+	display: flex;
+}
+
+.userGuideCategoryTabNav{
+	font-size: 0;
+	text-align: center;
+}
+
+.userGuideCategoryTabNav li{
+	/* display: inline-block;
+	
+	text-align: center;
+	
+	margin-right: 50px;
+	margin-left: 50px;
+	margin-top: 30px;
+     */
+    flex: 3;
+    height: 46px;
+	width: 200px;
+	border: 1px solid #ddd;
+	border-radius: 30px;
+	margin-top: 30px;
+	margin-left: 150px;
+}
+
+.userGuideCategoryTabNav li a:before{
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 3px;
+}
+
+.userGuideCategoryTabNav li a{
+	position: relative;
+	display: block;
+	padding: 0 30px;
+	line-height: 46px;
+	text-decoration: none;
+	font-size: 16px;
+}
+
+.userGuideCategoryTabNav li a:hover, .userGuideCategoryTabNav li a.active{
+	background: #006666;
+	color: #FFFFFF;
+    border-radius: 30px;
+}
+
+.userGuideCategoryTabContent{
+	flex: 7;
+	margin-left: 100px;
+}
+
+/* 가이드 CSS */
+
+.strongMargin{
+	display: block;
+	margin-top: 15px;
+	margin-bottom: 10px;	
+}
+
+.strongTitle{
+	font-size: 25px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.contentCrossLine{
+	border-bottom: 1px solid #c59246e0;
+	width: 1000px;
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+/* 매칭 찾기 */
+
+#matchingUiGuide_1{
+	width: 500px;
+	height: 600px;
+}
+
+#matchingUiGuide_1_1{
+	width: 500px;
+	height: 70px;
+	margin-right: 0;
+}
+
+.userGuideCategoryTabMatchingDiv_1_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+	width: 500px;
+}
+
+.userGuideCategoryTabMatchingDiv_1{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabMatchingDiv_1_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#matchingUiGuide_2{
+	width: 500px;
+	height: 300px;
+}
+
+.userGuideCategoryTabMatchingDiv_2_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabMatchingDiv_2{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabMatchingDiv_2_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+/* 모집 */
+
+#recruitUiGuide_1{
+	width: 500px;
+	height: 300px;
+}
+
+.userGuideCategoryTabRecruitDiv_1_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 70px;
+}
+
+.userGuideCategoryTabRecruitDiv_1{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabRecruitDiv_1_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#recruitUiGuide_2{
+	width: 500px;
+	height: 600px;
+}
+
+.userGuideCategoryTabRecruitDiv_2_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabRecruitDiv_2{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabRecruitDiv_2_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#recruitUiGuide_3{
+	width: 500px;
+	height: 300px;
+}
+
+.userGuideCategoryTabRecruitDiv_3_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabRecruitDiv_3{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabRecruitDiv_3_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+/* 경기장 */
+
+#stadiumUiGuide_1{
+	width: 500px;
+	height: 300px;
+}
+
+.userGuideCategoryTabStadiumDiv_1_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabStadiumDiv_1{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabStadiumDiv_1_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#stadiumUiGuide_2{
+	width: 500px;
+	height: 400px;
+}
+
+.userGuideCategoryTabStadiumDiv_2_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabStadiumDiv_2{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabStadiumDiv_2_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#stadiumUiGuide_3{
+	width: 500px;
+	height: 400px;
+}
+
+.userGuideCategoryTabStadiumDiv_3_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabStadiumDiv_3{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabStadiumDiv_3_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+/* 커뮤니티 */
+
+#communityUiGuide_1{
+	width: 500px;
+	height: 500px;
+}
+
+.userGuideCategoryTabCommunityDiv_1_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabCommunityDiv_1{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabCommunityDiv_1_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#communityUiGuide_2{
+	width: 500px;
+	height: 600px;
+}
+
+.userGuideCategoryTabCommunityDiv_2_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabCommunityDiv_2{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabCommunityDiv_2_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#communityUiGuide_3{
+	width: 500px;
+	height: 600px;
+}
+
+.userGuideCategoryTabCommunityDiv_3_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabCommunityDiv_3{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabCommunityDiv_3_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+/* 대회일정 */
+
+#tournamentUiGuide_1{
+	width: 500px;
+	height: 400px;
+}
+
+.userGuideCategoryTabTournamentDiv_1_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+	width: 500px;
+}
+
+.userGuideCategoryTabTournamentDiv_1{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabTournamentDiv_1_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+/* 랭킹 */
+
+#recordUiGuide_1{
+	width: 500px;
+	height: 500px;
+}
+
+.userGuideCategoryTabRecordDiv_1_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabRecordDiv_1{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabRecordDiv_1_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#recordUiGuide_2{
+	width: 500px;
+	height: 200px;
+}
+
+.userGuideCategoryTabRecordDiv_2_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabRecordDiv_2{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabRecordDiv_2_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+/* 고객센터 */
+
+#customerServiceUiGuide_1{
+	width: 500px;
+	height: 500px;
+}
+
+.userGuideCategoryTabCustomerServiceDiv_1_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabCustomerServiceDiv_1{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabCustomerServiceDiv_1_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#customerServiceUiGuide_2{
+	width: 500px;
+	height: 600px;
+}
+
+.userGuideCategoryTabCustomerServiceDiv_2_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabCustomerServiceDiv_2{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabCustomerServiceDiv_2_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+/* 마이페이지 */
+
+#myPageUiGuide_1{
+	width: 500px;
+	height: 300px;
+}
+
+.userGuideCategoryTabMyPageDiv_1_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 60px;
+	height: 300px;
+}
+
+.userGuideCategoryTabMyPageDiv_1{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabMyPageDiv_1_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#myPageUiGuide_2{
+	width: 500px;
+	height: 300px;
+}
+
+.userGuideCategoryTabMyPageDiv_2_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabMyPageDiv_2{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabMyPageDiv_2_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#myPageUiGuide_3{
+	width: 500px;
+	height: 400px;
+}
+
+.userGuideCategoryTabMyPageDiv_3_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabMyPageDiv_3{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabMyPageDiv_3_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#myPageUiGuide_4{
+	width: 500px;
+	height: 600px;
+}
+
+.userGuideCategoryTabMyPageDiv_4_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabMyPageDiv_4{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabMyPageDiv_4_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}
+
+#myPageUiGuide_5{
+	width: 500px;
+	height: 300px;
+}
+
+.userGuideCategoryTabMyPageDiv_5_Img{
+	border: 1px solid #c59246e0;
+	border-radius: 30px;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+.userGuideCategoryTabMyPageDiv_5{
+	display: flex;
+	gap: 50px;
+}
+
+.userGuideCategoryTabMyPageDiv_5_Text{
+	margin-top: 50px;
+	flex-direction: column;
+}

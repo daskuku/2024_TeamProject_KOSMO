@@ -1,0 +1,128 @@
+----------------------------------------------------------------------
+엔터키 막기 방법
+----------------------------------------------------------------------
+<form name="boardSearchForm" onsubmit="return false;">
+
+----------------------------------------------------------------------
+JQuery 엔터키 막기
+----------------------------------------------------------------------
+$(document).on("keydown", "form", function(event) { 
+	return event.key != "Enter";
+});
+
+----------------------------------------------------------------------
+엔터키 검색 방법
+----------------------------------------------------------------------
+$(function() {
+	$(".keyword1").on('keypress', function(e) {
+		if (e.keyCode == 13) {
+			$('.xxx').trigger('click');
+		}
+	});
+});
+
+----------------------------------------------------------------------
+표현언어 EL 우선순위
+----------------------------------------------------------------------
+page > request > session > application
+
+----------------------------------------------------------------------
+다른 페이지로 이동하면서 데이터를 전달 방법
+----------------------------------------------------------------------
+<c:url var="url1" value="/test01/member1.jsp">
+	<c:param name="id" 		value="hong" />
+	<c:param name="pwd" 	value="1234" />
+	<c:param name="name" 	value="홍길동" />
+</c:url>
+
+<a href='${ url1 }'>회원정보출력</a>
+
+----------------------------------------------------------------------
+함수 기능
+----------------------------------------------------------------------
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+<c:set var="money" value="  999999  " scope="page" />
+
+[${fn:trim(money)}]<br>
+
+----------------------------------------------------------------------
+동적 SQL문
+----------------------------------------------------------------------
+<select id="foreachSelect" resultMap="memResult" parameterType="java.util.Map">
+	<!-- <include refid="a" /> -->
+	<![CDATA[
+		SELECT * FROM T_MEMBER 
+	]]>
+      
+	WHERE NAME IN
+	
+	<foreach item="item" collection="list" open="(" separator="," close=")" >
+		#{ item }
+	</foreach>
+	
+	ORDER BY JOINDATE DESC
+</select>
+
+----------------------------------------------------------------------
+동적 SQL문
+----------------------------------------------------------------------
+   
+<insert id="foreachInsert"  parameterType="java.util.Map">
+	
+	<foreach item="item"  collection="list"   open="INSERT ALL" separator=" " close="SELECT * FROM DUAL" >
+          
+          INTO  T_MEMBER(ID, PWD, NAME, EMAIL)
+          
+          VALUES	(
+	          			#{ item.id }
+	          		,	#{ item.pwd }
+	          		,	#{ item.name }
+	          		,	#{ item.email }
+					)
+	</foreach>
+	
+</insert>
+
+
+<c:set var="name" value="홍길동" />
+
+<c:choose>    
+	<c:when test="${name eq '홍길동'}">        
+		홍길동이 맞습니다.    
+	</c:when>
+
+	<c:when test="${name eq '철수'}">        
+		홍길동이 아닙니다.    
+	</c:when>    
+
+	<c:otherwise>        
+		사람이 없습니다 ㅜㅜ    
+	</c:otherwise>
+</c:choose>
+
+
+게시판 페이징 처리
+[처음][이전] 1 [2] .. [10] [다음][마지막]
+
+	1.한 화면에 보여지는 행의 개수
+	2.한 화면에 보여지는 페이지 번호 개수
+	3.검색한 페이지 총 개수
+		123개 게시글은 총 13개 페이지 번호가 필요하다.
+	4.내가 선택한 페이지 번호	
+
+=======================================================
+원시적으로 로그인 확인 처리
+=======================================================
+<c:if test="${ empty sessionScope.mid }">
+	<script>
+		alert("로그인 해주삼!");
+		location.replace("/loginForm.do");
+	</script>
+</c:if>
+=======================================================
+
+<!-- MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM -->
+<!-- mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm -->
+<!-- nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn -->
+

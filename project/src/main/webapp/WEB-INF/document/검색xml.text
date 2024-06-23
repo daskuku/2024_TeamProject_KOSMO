@@ -1,0 +1,80 @@
+<sql id="boardWhere"> 
+	<if <!-- keyword1 또는 keyword2 중 하나라도 null이 아니고 길이가 0보다 큰지 확인합니다. -->
+		test="(keyword1 != null and keyword1.length() > 0) or (keyword2 != null and keyword2.length() > 0)">
+		and ( <!-- 조건 블록의 시작 -->
+	</if>
+	<if test="keyword1 != null and keyword1.length() > 0"> <!-- keyword1이 null이 아니고 길이가 0보다 큰지 확인합니다. -->
+		( <!-- 조건 블록의 시작 -->
+		<if test="searchType == 'name'"> <!-- searchType이 'name'인지 확인합니다. -->
+			upper(name) like upper('%${keyword1}%') <!-- 이름으로 검색하는 SQL 조건 -->
+		</if>
+		<if test="searchType == 'mid'"> <!-- searchType이 'mid'인지 확인합니다. -->
+			upper(mid) like upper('%${keyword1}%') <!-- mid로 검색하는 SQL 조건 -->
+		</if>
+		<if test="searchType == 'all'"> <!-- searchType이 'all'인지 확인합니다. -->
+			upper(name) like upper('%${keyword1}%') <!-- 이름으로 검색하는 SQL 조건 -->
+			or
+			upper(mid) like upper('%${keyword1}%') <!-- mid로 검색하는 SQL 조건 -->
+			or
+			upper(nickname) like upper('%${keyword1}%') <!-- 별명으로 검색하는 SQL 조건 -->
+			or
+			upper(email) like upper('%${keyword1}%') <!-- 이메일로 검색하는 SQL 조건 -->
+			or
+			upper(birthdate) like upper('%${keyword1}%') <!-- 생년월일로 검색하는 SQL 조건 -->
+			or
+			upper(phone) like upper('%${keyword1}%') <!-- 전화번호로 검색하는 SQL 조건 -->
+		</if>
+		<if
+			test="searchType != 'name' and searchType != 'mid' and searchType != 'all'">
+			upper(name) like upper('%${keyword1}%') <!-- 기타 경우 (name, mid, all이 아닌 경우) 이름으로 검색하는 SQL 조건 -->
+			or
+			upper(mid) like upper('%${keyword1}%') <!-- 기타 경우 (name, mid, all이 아닌 경우) mid로 검색하는 SQL 조건 -->
+			or
+			upper(nickname) like upper('%${keyword1}%') <!-- 기타 경우 (name, mid, all이 아닌 경우) 별명으로 검색하는 SQL 조건 -->
+			or
+			upper(email) like upper('%${keyword1}%') <!-- 기타 경우 (name, mid, all이 아닌 경우) 이메일로 검색하는 SQL 조건 -->
+			or
+			upper(birthdate) like upper('%${keyword1}%') <!-- 기타 경우 (name, mid, all이 아닌 경우) 생년월일로 검색하는 SQL 조건 -->
+			or
+			upper(phone) like upper('%${keyword1}%') <!-- 기타 경우 (name, mid, all이 아닌 경우) 전화번호로 검색하는 SQL 조건 -->
+		</if>
+		)
+	</if>
+	<if
+		test="(keyword1 != null and keyword1.length() > 0) and (keyword2 != null and keyword2.length() > 0)">
+		${orand} <!-- 변수 orand를 삽입합니다. -->
+	</if>
+	<if test="keyword2 != null and keyword2.length() > 0"> <!-- keyword2가 null이 아니고 길이가 0보다 큰지 확인합니다. -->
+		( <!-- 조건 블록의 시작 -->
+		<if test="searchType == 'name'"> <!-- searchType이 'name'인지 확인합니다. -->
+			upper(name) like upper('%${keyword2}%') <!-- 이름으로 검색하는 SQL 조건 -->
+		</if>
+		<if test="searchType == 'mid'"> <!-- searchType이 'mid'인지 확인합니다. -->
+			upper(mid) like upper('%${keyword2}%') <!-- mid로 검색하는 SQL 조건 -->
+		</if>
+		<if test="searchType == 'all'"> <!-- searchType이 'all'인지 확인합니다. -->
+			upper(name) like upper('%${keyword2}%') <!-- 이름으로 검색하는 SQL 조건 -->
+			or
+			upper(mid) like upper('%${keyword2}%') <!-- mid로 검색하는 SQL 조건 -->
+			or
+			upper(nickname) like upper('%${keyword2}%') <!-- 별명으로 검색하는 SQL 조건 -->
+			or
+			upper(email) like upper('%${keyword2}%') <!-- 이메일로 검색하는 SQL 조건 -->
+			or
+			upper(birthdate) like upper('%${keyword2}%') <!-- 생년월일로 검색하는 SQL 조건 -->
+			or
+			upper(phone) like upper('%${keyword2}%') <!-- 전화번호로 검색하는 SQL 조건 -->
+		</if>
+		<if
+			test="searchType != 'name' and searchType != 'mid' and searchType != 'all'">
+			upper(name) like upper('%${keyword2}%') <!-- 기타 경우 (name, mid, all이 아닌 경우) 이름으로 검색하는 SQL 조건 -->
+			or
+			upper(mid) like upper('%${keyword2}%') <!-- 기타 경우 (name, mid, all이 아닌 경우) mid로 검색하는 SQL 조건 -->
+		</if>
+		)
+	</if>
+	<if
+		test="(keyword1 != null and keyword1.length() > 0) or (keyword2 != null and keyword2.length() > 0)">
+		) <!-- 조건 블록의 끝 -->
+	</if>
+</sql>

@@ -1,0 +1,139 @@
+* {
+	font-size: 15px;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+th, td {
+	padding: 10px 15px 10px 15px;
+}
+
+html,
+body {
+  /* width: 100%;
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  overflow: hidden; */
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+ul, ol{
+	list-style:none;
+}
+
+a{
+	text-decoration:none;
+}
+
+.memberInfoFindFormTitle{
+	border-bottom: 1px solid #000000;
+	width: 40%;
+	margin: 0 auto;
+	margin-bottom: 30px;
+}
+
+.memberInfoFindFormTitle p{
+	text-align: center;
+	font-size: 40px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.memberInfoFindFormNameTh{
+	background: none;
+	color: #000000;
+	text-decoration: underline;
+	text-underline-position:under;
+	font-size: 18px;
+}
+
+.memberInfoFindFormPhoneTh{
+	background: none;
+	color: #000000;
+	text-decoration: underline;
+	text-underline-position:under;
+	font-size: 18px;
+}
+
+.membermemberInfoFindMidResultTh {
+	background: none;
+	color: #000000;
+	text-decoration: underline;
+	text-underline-position:under;
+	font-size: 18px;
+}
+
+.membermemberInfoFindPasswordResultTh{
+	background: none;
+	color: #000000;
+	text-decoration: underline;
+	text-underline-position:under;
+	font-size: 18px;
+}
+
+.memberInfoFindPasswordCheckResultTh{
+	background: none;
+	color: #000000;
+	text-decoration: underline;
+	text-underline-position:under;
+	font-size: 18px;
+}
+
+.memberInfoFindTable{
+	margin: 0 auto;
+	text-align: center;
+	margin-top: 50px;
+}
+
+.memberInfoFindFormBtn{
+	text-align: center;
+	margin-top: 30px;
+}
+
+.memberInfoFindBtn{
+	width: 150px;
+	height: 50px;
+	background: #c59246e0;
+	border-radius: 10px;
+	border: none;
+	color: #FFFFFF;
+	cursor: pointer;
+}
+
+.changePwdMoveToLoginFormBtnDiv{
+	display: flex;
+	justify-content: center;
+	margin-top: 10px;
+}
+
+.moveToLoginFormBtn, .changePasswordBtn{
+	width: 150px;
+	height: 50px;
+	margin-top: 20px;
+	background: #c59246e0;
+	border-radius: 10px;
+	border: none;
+	color: #FFFFFF;
+	cursor: pointer;
+}
+
+.changePasswordBtnDiv{
+	margin-right: 20px;
+}
+
+.memberInfoFindResultTable{
+	margin: 0 auto;
+	margin-top: 20px;
+	width: 700px;
+}
+
+.memberInfoFindMidResult, .memberInfoFindPasswordCheckResult, .memberInfoFindPasswordResult {
+	width: 400px;
+	text-align: center;
+}

@@ -1,0 +1,344 @@
+* {
+	font-size: 15px;
+}
+
+table {
+	border-collapse: collapse;
+	border-color: gray;
+	margin: 0 auto;
+	margin-top:20px;
+}
+
+th, td {
+	padding: 10px 15px 10px 15px;
+}
+
+th {
+	background-color: #c59246e0;
+    color: white;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  overflow-x: hidden;
+}
+
+ul, ol{
+	list-style:none;
+}
+
+a{
+	text-decoration:none;
+}
+
+/* section 나누기, 사이드바 CSS */
+.row-admin_side_nav .nav-item{
+	text-align: center;
+	border: 1px solid #006666;
+	border-radius: 30px;
+	width: 150px;
+	height: 50px;
+	line-height: 3.3;
+	margin-top: 30px;
+}
+
+.row-admin_side_nav .nav-item:hover{
+	text-align: center;
+	border: 1px solid #006666;
+	border-radius: 30px;
+	width: 150px;
+	height: 50px;
+	line-height: 3.3;
+	margin-top: 30px;
+	background-color: #006666;
+	color: #FFFFFF;
+}
+
+.adminPageSideBar {
+    float: left;
+    margin-left: 250px;
+}
+
+.adminSearchFormTable{
+	margin-right: 570px;
+	width: 800px;
+}
+
+.adminListTable {
+    margin: 0 auto;
+}
+
+.adminFormTopContents, .adminFormPaging {
+    text-align: center;
+}
+
+/* Table CSS */
+
+.activePageNo{
+    color: #FFFFFF;
+    background-color: #c59246e0;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    text-align: center;
+    line-height: 30px;
+}
+
+.arrowLeft {
+    color: #c59246e0;
+}
+
+.arrowLeft strong{
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.arrowRight {
+    color: #c59246e0;
+}
+
+.arrowRight strong{
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.adminFormPaging{
+	text-align: center;
+}
+
+.adminFormRowCntPerPage{
+	margin-left: 800px;
+}
+
+.rowCntPerPage{
+	border: none;
+}
+
+.adminFormTopContents{
+	justify-content: center;
+	margin-top: 30px;
+	display: flex;
+}
+
+.fontLightGray{
+	color: #999999;
+}
+
+.search{
+	display: flex;
+	margin-top: 20px;
+	border-top: 1px solid #c59246e0;
+	padding-top: 20px;
+	justify-content: center;
+}
+
+.searchBtnDiv{
+	text-align: center;
+	margin-top: 30px;
+}
+
+.sido, .sigungu, #minDate, #maxDate, .minGames_played, .maxGames_played, .minWin, .maxWin, .minDraws, .maxDraws, .minLoss, .maxLoss, .minGoals, .maxGoals, .minAssists, .maxAssists{
+	height: 35px;
+	margin-right: 20px;
+	border-radius: 10px;
+	border: 1px solid #c59246e0;
+	width: 200px;
+	text-align: center;
+}
+
+.maxGames_played, .maxWin, .maxDraws, #maxDate, .maxLoss, .maxGoals, .maxAssists{
+	margin-left: 20px;
+}
+
+.sigungu_id, .sido_id{
+	height: 35px;
+	margin-right: 5px;
+	border-radius: 10px;
+	border: 1px solid #c59246e0;
+	width: 100px;
+	text-align: center;
+}
+
+.keyword1{
+	height: 40px;
+	width: 200px;
+	margin-right: 20px;
+	border-radius: 10px;
+	border: 1px solid #c59246e0;
+	text-align: center;
+}
+
+
+.keyword2{
+	height: 40px;
+	width: 200px;
+	margin-right: 20px;
+	border-radius: 10px;
+	border: 1px solid #c59246e0;
+	text-align: center;
+}
+
+.searchType1, .orAnd{
+	height: 40px;
+	margin-right: 20px;
+	border-radius: 10px;
+	border: 1px solid #c59246e0;
+}
+
+.adminListTable td{
+    height: 70px;
+    border-bottom: 1px solid gray;
+}
+
+[class$='adminListTable'] tr:nth-child(n+2):hover{
+	background-color:rgba(211, 211, 211, 0.3);
+}
+
+.tournamentTable td{
+    height: 70px;
+    border-bottom: 1px solid gray;
+}
+
+[class$='tournamentTable'] tr:nth-child(n+2):hover{
+	background-color:rgba(211, 211, 211, 0.3);
+}
+
+/* 대회 일정 */
+.tournament {
+    cursor: pointer;
+    height: 46px;
+	width: 280px;
+	text-align: center;
+	margin-right: 50px;
+	margin-left: 50px;
+	margin-top: 30px;
+	border-bottom: none;
+	border-radius: 30px;
+}
+
+ .onvalue {
+    background: #006666; /* 변경하고 싶은 색상으로 수정하세요 */
+    color: #FFFFFF;
+    border-radius: 30px;
+} 
+
+.adminTournamentCategoryTab {
+    margin: 0 auto;
+    margin-top: 50px;
+    border-collapse: separate;
+    border-spacing: 100px 0;
+    margin-bottom: 40px;
+}
+
+.adminTournamentCategoryTab td {
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+}
+
+.adminTournamentCategoryTab td {
+    border-radius: 30px;
+}
+
+.adminTournamentCategoryTab td {
+    border-radius: 30px;
+}
+
+.adminTournamentCategoryTab td.onvalue {
+    background-color: #006666; /* 선택된 셀에 대한 스타일 */
+}
+
+.adminTournamentSearch{
+	display: flex;
+	margin: 0 auto;
+	margin-top: 100px;
+	text-align: center;
+	justify-content: center;
+}
+
+.region1 {
+    cursor: pointer;
+}
+
+.selected1 {
+    color: #c59246e0; /* 변경하고 싶은 색상으로 수정하세요 */
+    font-weight: bold;
+}
+
+.adminMemberUpBtn, .adminMemberDelBtn {
+	background: #c59246e0;
+	border-radius: 10px;
+	border: none;
+	color: #FFFFFF;
+	width: 70px;
+	height: 50px;
+	margin-top: 10px;
+	cursor: pointer;
+}
+
+.adminMemberMoveBtn{
+	background: #c59246e0;
+	border-radius: 10px;
+	border: none;
+	color: #FFFFFF;
+	width: 150px;
+	height: 50px;
+	margin-top: 10px;
+	cursor: pointer;
+	margin-left: 30px;
+}
+
+.boardRegBtn{
+	background: #c59246e0;
+	border-radius: 10px;
+	border: none;
+	color: #FFFFFF;
+	width: 70px;
+	height: 50px;
+	margin-top: 10px;
+	cursor: pointer;
+}
+
+
+.boardEmptyBtn{
+	background: #c59246e0;
+	border-radius: 10px;
+	border: none;
+	color: #FFFFFF;
+	width: 70px;
+	height: 50px;
+	margin-top: 10px;
+	cursor: pointer;
+}
+
+.boardResetBtn{
+	background: #c59246e0;
+	border-radius: 10px;
+	border: none;
+	color: #FFFFFF;
+	width: 70px;
+	height: 50px;
+	margin-top: 10px;
+	cursor: pointer;
+}
+
+
+
+.boardResetBtn{
+	background: #c59246e0;
+	border-radius: 10px;
+	border: none;
+	color: #FFFFFF;
+	width: 70px;
+	height: 50px;
+	margin-top: 10px;
+	cursor: pointer;
+}

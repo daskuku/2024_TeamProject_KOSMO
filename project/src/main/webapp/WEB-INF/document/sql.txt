@@ -1,0 +1,65 @@
+-------------------------------------------------------------
+DELETE FROM BOARD;
+
+DROP TABLE BOARD;		-- 트랜잭션의 대상이 아니므로 COMMIT; 할 필요가 없다.
+
+CREATE TABLE BOARD(
+	B_NO      NUMBER(9)                          --게시판 글 고유번호
+	,SUBJECT   VARCHAR2(50)     NOT NULL         --글 제목
+	,WRITER    VARCHAR2(30)     NOT NULL         --글쓴이 이름
+	,CONTENT   VARCHAR2(2000)   NOT NULL         --글 내용
+	,PWD       VARCHAR2(12)     NOT NULL         --암호
+	,EMAIL     VARCHAR2(30)                      --이메일
+	,REG_DATE   DATE            DEFAULT SYSDATE  --등록일
+	,READCOUNT  NUMBER(5)       DEFAULT 0        --조회수      
+	----------------------------------------------------------
+	,GROUP_NO   NUMBER(9)       NOT NULL         --게시판 글의 소속 그룹번호. 정렬 시 사용.
+	,PRINT_NO   NUMBER(9)       NOT NULL         --같은 그룹번호 내에서 화면 출력 순서 번호.정렬 시 사용.
+	,PRINT_LEVEL NUMBER(9)      NOT NULL         --같은 그룹번호 내에서 댓글 들여쓰기 레벨 단계 번호. 
+					  --부모글의 print_level 보다 1단계 커야한다.  
+	----------------------------------------------------------
+	, IMG         VARCHAR2(100)                    --이미지 파일명           
+	----------------------------------------------------------
+	, PRIMARY KEY(B_NO)
+);   
+ 
+SELECT * FROM MEMBER;
+ 
+------------------------------------------------------------- 
+DELETE FROM MEMBER;
+
+DROP TABLE MEMBER;	
+
+CREATE TABLE MEMBER
+(  
+		MID_NO		NUMBER(3)
+	,	MID			VARCHAR2(30)   		NOT NULL UNIQUE		
+	,	MNAME    	VARCHAR2(30)		NOT NULL
+	,	PWD			VARCHAR2(30)    	NOT NULL
+	,	REG_DATE	DATE				DEFAULT	SYSDATE
+	,	PRIMARY	KEY(MID_NO)
+);
+
+-------------------------------------------------------------
+INSERT INTO MEMBER VALUES(1, 'abc', '사오정', '123', SYSDATE);
+INSERT INTO MEMBER VALUES(2, 'xyz', '저팔계', '123', SYSDATE);
+COMMIT;
+-------------------------------------------------------------
+CREATE TABLE MEM_HOBBY
+(
+		MID_NO		NUMBER(3)
+	,	HOBBY		VARCHAR2(30)   		NOT NULL 		
+	,	FOREIGN KEY(MID_NO) REFERENCES MEMBER(MID_NO)
+);
+-- REFERENCES MEMBER(MID_NO) == MEMBER 테이블에 MID_NO 를 참조값으로 한다.
+
+-- 하나의 INSERT 로 다량의 데이터 넣는 방법
+INSERT INTO MEM_HOBBY
+(
+	SELECT 3, '독서' FROM DUAL
+	UNION
+	SELECT 3, '운동' FROM DUAL
+)
+--------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------

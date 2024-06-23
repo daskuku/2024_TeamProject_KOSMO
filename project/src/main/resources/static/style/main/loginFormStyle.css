@@ -1,0 +1,89 @@
+*{
+	font-size:15px;
+}
+
+table{
+	border-collapse:collapse;
+	border-color:gray;
+	margin-top: 50px;
+	margin: 0 auto;
+}
+
+th,td{
+	padding:10px 15px 10px 15px;
+	border-color:gray;
+}
+
+th{
+	background-color:#aaaaaa;
+}
+
+.loginFormContainer{
+	margin: 0 auto;
+}
+
+.loginAndautoLogin, .memberRegAndInfoFind {
+    text-align: center;
+}
+
+.loginbtn{
+	width: 305px;
+	height: 50px;
+	margin-top: 40px;
+	background: #c59246e0;
+	border-radius: 10px;
+	border: none;
+	color: #FFFFFF;
+	cursor: pointer;
+}
+
+.regBtn, .memberInfoFindBtn{
+	width: 150px;
+	height: 50px;
+	margin-top: 5px;
+	cursor: pointer;
+}
+
+.loginTitle{
+	border-bottom: 1px solid #000000;
+	width: 40%;
+	margin: 0 auto;
+	margin-bottom: 30px;
+}
+
+.loginTitle p{
+	text-align: center;
+	font-size: 40px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.loginFormMidTh{
+	background: none;
+	color: #000000;
+	text-decoration: underline;
+	text-underline-position:under;
+	font-size: 18px;
+}
+
+.loginFormPwdTh{
+	background: none;
+	color: #000000;
+	text-decoration: underline;
+	text-underline-position:under;
+	font-size: 18px;
+}
+
+.regBtn{
+	background: #ffb600;
+	border-radius: 10px;
+	border: none;
+	color: #FFFFFF;
+}
+
+.memberInfoFindBtn{
+	background: #ffdda2;
+	border-radius: 10px;
+	border: none;
+	color: #FFFFFF;
+}

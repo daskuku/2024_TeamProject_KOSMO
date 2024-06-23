@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kosmo.team.project.dao.SampleDAO">
+
+	<sql id="sampleWhere">
+	
+			        	<!-- 키워드1, 키워드2 -->	
+			        	<if test="(keyword1 != null and keyword1.length() > 0) or (keyword2 != null and keyword2.length() > 0)">
+			        		AND 
+			        		(
+			        	</if>
+			        		
+			     		<if test="keyword1 != null and keyword1.length() > 0">
+			      			(
+			        			UPPER(SUBJECT) LIKE UPPER('%${ keyword1 }%')
+				    	   		OR
+				        		UPPER(CONTENT) LIKE UPPER('%${ keyword1 }%')
+			       			)
+			      		</if>        			
+			       		
+			       		<if test="(keyword1 != null and keyword1.length() > 0) and (keyword2 != null and keyword2.length() > 0)">
+							${ orand }
+			       		</if>
+			       		
+			       		<if test="keyword2 != null and keyword2.length() > 0">
+			       			(
+				        		UPPER(SUBJECT) LIKE UPPER('%${ keyword2 }%')
+				    	   		OR
+				        		UPPER(CONTENT) LIKE UPPER('%${ keyword2 }%')
+			       			)
+			       		</if>
+				        	
+			        	<if test="(keyword1 != null and keyword1.length() > 0) or (keyword2 != null and keyword2.length() > 0)">
+			        		)
+			        	</if>   
+			        		
+			        		AND
+			        		(
+			        			PRINT_NO = 0
+			        		)     	
+			        	
+			        	<!-- 체크박스 -->
+			        	<if test="date != null">
+				        	<foreach collection="date" item="temp" open="AND (" close=")" separator=" OR ">
+				        		TO_CHAR(SYSDATE + ${ temp }, 'YYYYMMDD') = TO_CHAR(REG_DATE, 'YYYYMMDD')	        		
+				        	</foreach>		        	
+				        </if>	
+				        	
+	</sql>
+
+	<select id="getSampleListAllCount" resultType="int" >
+		
+		SELECT COUNT(*) FROM BOARD
+		WHERE PRINT_NO = 0
+		
+	</select>
+
+	<select id="getSampleListCount" parameterType="kosmo.team.project.dto.SampleSearchDTO" resultType="int" >
+	
+		SELECT		COUNT(*)
+		
+		FROM
+		(
+			SELECT
+					B_NO							AS "b_no" 
+				,	SUBJECT							AS "subject"
+	            ,	WRITER							AS "writer"
+	            ,	READCOUNT						AS "readcount"
+	            ,	PRINT_NO						AS "print_no"
+	            ,	PRINT_LEVEL						AS "print_level"
+	            ,	TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS "reg_date"
+	            
+	        FROM BOARD
+	        
+	        WHERE
+	        		1 = 1
+
+	        <include refid="sampleWhere" />
+	        
+		)
+		
+	</select>
+	
+	<select id="getSampleList" parameterType="kosmo.team.project.dto.SampleSearchDTO" resultType="kosmo.team.project.dto.SampleDTO" >
+	
+		SELECT * FROM 
+		( 
+			SELECT 
+					ROWNUM RNUM
+				,	ZXCVB.* 
+				
+			FROM 
+			(	
+	
+					SELECT
+							B_NO							AS "b_no" 
+						,	SUBJECT							AS "subject"
+			            ,	WRITER							AS "writer"
+			            ,	READCOUNT						AS "readcount"
+			            ,	PRINT_NO						AS "print_no"
+			            ,	PRINT_LEVEL						AS "print_level"
+			            ,	TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS "reg_date"
+			            ,	( SELECT COUNT(*) FROM BOARD B2 WHERE B2.GROUP_NO = B1.B_NO AND PRINT_NO > 0 ) AS "comment_count"
+			            
+			        FROM BOARD B1
+			        
+			        WHERE
+			        		1 = 1
+			
+					<include refid="sampleWhere" />
+			        	
+					<if test="sort == null or sort.length() == 0">
+			        ORDER BY 
+							GROUP_NO DESC, PRINT_NO ASC
+			        </if>
+			        
+			        <if test="sort != null and sort.length() > 0">
+			        ORDER BY
+							${ sort }, REG_DATE DESC
+			        </if>
+        	
+	<![CDATA[
+			) ZXCVB 
+			
+			WHERE	ROWNUM <= ${ end_rowNo } 
+		) 
+		
+		WHERE	RNUM >= ${ begin_rowNo }
+	]]>
+	
+	</select>
+	
+	<update id="updateReadCount" parameterType="int">
+	
+		UPDATE	BOARD
+				
+		SET		READCOUNT	=	READCOUNT + 1
+		
+        WHERE	B_NO		=	#{ b_no }
+        
+	</update>	
+
+	<select id="getSampleDetailForm" parameterType="int" resultType="kosmo.team.project.dto.SampleDTO" >
+	
+		SELECT 
+				B_NO			"b_no"
+			,	SUBJECT			"subject"
+			,	WRITER			"writer"
+			,	REG_DATE		"reg_date" 
+			,	READCOUNT		"readcount"
+			,	CONTENT			"content"
+			,	PWD				"pwd"
+			,	EMAIL			"email"
+			,	GROUP_NO		"group_no"
+			,	PRINT_NO		"print_no"
+			,	PRINT_LEVEL		"print_level"
+		
+		FROM	BOARD
+				
+        WHERE	B_NO	=	#{ b_no }
+        
+	</select>
+	
+	<select id="getSampleDetailCommentList" parameterType="int" resultType="kosmo.team.project.dto.SampleDTO" >
+	
+		SELECT
+				B_NO							AS "b_no" 
+			,	SUBJECT							AS "subject"
+            ,	WRITER							AS "writer"
+            ,	READCOUNT						AS "readcount"
+            ,	CONTENT							AS "content"
+            ,	PRINT_NO						AS "print_no"
+            ,	PRINT_LEVEL						AS "print_level"
+            ,	TO_CHAR(REG_DATE, 'YYYY-MM-DD HH24:MI:SS') AS "reg_date"
+			            
+        FROM BOARD
+        
+        WHERE
+        		1 = 1
+				AND
+				GROUP_NO = #{ b_no }
+				AND
+				PRINT_NO > 0
+                         
+		ORDER BY 
+				GROUP_NO DESC, PRINT_NO DESC
+	
+	</select>
+	
+	<select id="getSampleDetailCount" parameterType="int" resultType="int" >
+	
+		SELECT	COUNT(*)
+		
+		FROM	BOARD
+		
+		WHERE	B_NO	=	#{ b_no }
+		
+	</select>
+
+	<select id="getSampleDetailPasswordCount" parameterType="kosmo.team.project.dto.SampleDTO" resultType="int" >
+	
+		SELECT	COUNT(*)
+		
+		FROM	BOARD
+		
+		WHERE	
+        		B_NO	=	#{ b_no }
+        		AND
+        		PWD		=	#{ pwd }
+        		
+	</select>
+	
+	<update id="updateSampleDetail" parameterType="kosmo.team.project.dto.SampleDTO">
+	
+		UPDATE	BOARD
+				
+		SET		
+				SUBJECT	=	#{ subject }
+			,	WRITER	=	#{ writer }
+			,	CONTENT	=	#{ content }
+			,	EMAIL	=	#{ email }
+		
+        WHERE	
+        		B_NO	=	#{ b_no }
+        		AND
+        		PWD		=	#{ pwd }
+        		
+	</update>
+	
+	<select id="getSampleDetailChildrenCount" parameterType="kosmo.team.project.dto.SampleDTO" resultType="int">
+		
+		SELECT	COUNT(*)
+		
+		FROM	BOARD
+		
+		WHERE	
+				GROUP_NO	=	( SELECT GROUP_NO FROM BOARD WHERE B_NO = #{ b_no } )
+				AND
+				PRINT_NO	>	( SELECT PRINT_NO FROM BOARD WHERE B_NO = #{ b_no } )
+				
+	</select>
+	
+	<update id="updateSampleDetailEmpty" parameterType="kosmo.team.project.dto.SampleDTO">
+	
+		UPDATE	BOARD
+		
+		SET
+				SUBJECT		=	'삭제됨'
+			,	CONTENT		=	'삭제됨'
+		
+        WHERE
+        		B_NO	=	#{ b_no }
+        		
+	</update>
+	
+	<delete id="deleteSampleDetail" parameterType="kosmo.team.project.dto.SampleDTO">
+	
+		DELETE	FROM	BOARD
+				
+        WHERE	
+        		B_NO	=	#{ b_no }
+        		AND
+        		PWD		=	#{ pwd }
+        		
+	</delete>
+	
+	<update id="updatePrintNoPlus1" parameterType="kosmo.team.project.dto.SampleDTO">
+	
+		UPDATE	BOARD
+		
+		SET
+				PRINT_NO	=	PRINT_NO + 1
+		
+        WHERE
+        		GROUP_NO	=	( SELECT GROUP_NO FROM BOARD WHERE B_NO = #{ b_no } )
+        		AND
+        		PRINT_NO	>	( SELECT PRINT_NO FROM BOARD WHERE B_NO = #{ b_no } )
+        		
+	</update>
+	
+	<insert id="insertSampleRegister" parameterType="kosmo.team.project.dto.SampleDTO">
+	
+		INSERT	INTO	BOARD
+		(
+				B_NO
+			,	SUBJECT
+			,	WRITER
+			,	READCOUNT
+			,	CONTENT
+			,	PWD
+			,	EMAIL
+			
+			,	GROUP_NO
+			,	PRINT_NO
+			,	PRINT_LEVEL
+		) 
+		VALUES 
+		(
+				( SELECT NVL(MAX(B_NO),0) + 1 FROM BOARD )
+			,	#{ subject }
+			,	#{ writer }
+			,	0
+			,	#{ content }
+			,	#{ pwd }
+			,	#{ email }
+			
+			<if test="b_no == 0">
+			,	( SELECT NVL(MAX(B_NO),0) + 1 FROM BOARD )
+			,	0
+			,	0
+			</if>			
+			
+			<if test="b_no > 0">
+			,	( SELECT GROUP_NO 			FROM BOARD WHERE B_NO = #{ b_no })
+			,	( SELECT PRINT_NO	 + 1	FROM BOARD WHERE B_NO = #{ b_no })
+			,	( SELECT PRINT_LEVEL + 1 	FROM BOARD WHERE B_NO = #{ b_no })
+			</if>
+		)
+		
+	</insert>
+	
+</mapper>

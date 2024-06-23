@@ -1,0 +1,217 @@
+/* 수락 대기인원 관련 */
+.modalDiv_waiting
+{
+	display: none;
+}
+
+.bg_waiting
+{
+	width: 100vw;
+	height: 100vw;
+	background-color: rgba(0,0,0,.5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+
+.modal_waiting
+{
+	position: middle;
+	z-index: 10;
+	background-color: white;
+	width: 50%;
+	left: 25%;
+	top: 25%;
+	padding: 20px;
+	border-radius: 15px;
+} 
+	
+
+.waitingCheck {
+   	cursor: pointer;
+   	background: lightblue; /* 변경하고 싶은 색상으로 수정하세요 */
+    font-weight: bold;
+}
+
+
+
+
+/* 팀생성 관련 */
+.modalDiv_regTeam
+{
+	display: none;
+}
+
+.bg_regTeam
+{
+	width: 100vw;
+	height: 100vw;
+	background-color: rgba(0,0,0,.5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+
+.modal_regTeam
+{
+	position: middle;
+	z-index: 10;
+	background-color: white;
+	width: 50%;
+	left: 25%;
+	top: 25%;
+	padding: 20px;
+	border-radius: 15px;
+} 
+
+
+/* 팀정보 관련 */
+.modalDiv_myTeamInfo {
+	display: none;
+}
+
+.bg_myTeamInfo {
+	width: 100vw;
+	height: 100vh; /* 높이를 100vh로 변경하여 전체 화면을 덮도록 설정 */
+	background-color: rgba(0, 0, 0, .5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+
+.modal_myTeamInfo {
+	position: fixed; /* 중앙에 배치하기 위해 fixed로 변경 */
+	z-index: 10;
+	background-color: white;
+	width: 50%;
+	left: 25%;
+	top: 10%; /* top을 25%에서 10%로 변경 */
+	bottom: 10%; /* bottom 추가 */
+	padding: 20px;
+	border-radius: 15px;
+	overflow-y: auto; /* 세로 스크롤을 추가하여 내용이 넘칠 때 스크롤 가능하게 설정 */
+	box-sizing: border-box; /* 패딩과 테두리를 포함한 박스 크기 설정 */
+}
+
+/* .modal_myTeamInfo::-webkit-scrollbar {
+  display: none;
+} */
+
+.modal_myTeamInfo table {
+	width: 100%; /* 테이블 너비를 100%로 설정 */
+	margin-top: 20px;
+}
+
+.modal_myTeamInfo th, .modal_myTeamInfo td {
+	border: 1px solid #ccc;
+	padding: 10px;
+	text-align: center;
+}
+
+.modal_myTeamInfo caption {
+	font-size: 18px;
+	margin-top: 20px;
+}
+
+
+/* 매칭신청 관련 */
+.modalDiv_matching
+{
+	display: none;
+}
+
+.bg_matching
+{
+	width: 100vw;
+	height: 100vw;
+	background-color: rgba(0,0,0,.5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+
+.modal_matching
+{
+	position: middle;
+	z-index: 10;
+	background-color: white;
+	width: 50%;
+	left: 25%;
+	top: 25%;
+	padding: 20px;
+	border-radius: 15px;
+} 
+
+/* 용병신청 관련 */
+.modalDiv_hired
+{
+	display: none;
+}
+
+.bg_hired
+{
+	width: 100vw;
+	height: 100vw;
+	background-color: rgba(0,0,0,.5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+
+.modal_hired
+{
+	position: middle;
+	z-index: 10;
+	background-color: white;
+	width: 50%;
+	left: 25%;
+	top: 25%;
+	padding: 20px;
+	border-radius: 15px;
+} 
+
+
+/* 레슨신청 관련 */
+.modalDiv_lesson
+{
+	display: none;
+}
+
+.bg_lesson
+{
+	width: 100vw;
+	height: 100vw;
+	background-color: rgba(0,0,0,.5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+
+.modal_lesson
+{
+	position: middle;
+	z-index: 10;
+	background-color: white;
+	width: 50%;
+	left: 25%;
+	top: 25%;
+	padding: 20px;
+	border-radius: 15px;
+} 
+
+
+
+
+
+
+
+
+
+
+
